@@ -28,11 +28,28 @@ mongoose.connect("mongodb+srv://nguyen:JrZm8cSs8bsWHv1Q@cluster0-f0jha.mongodb.n
 const User = require("./models/User");
 const Product = require("./models/product");
 const Category = require("./models/category");
+const cate = require("./models/cate");
 
+// bcrypt
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
 
+app.get("/",function(req,res){      
+    var p = new Product({
+        name:"Iphone X",
+        image:"String",
+        price: 5000000,
+        date_begin: 2018-2-11,
+        date_end: 2019-2-11,
+        info: "",
+        description: "Sản phẩm tốt",
+    })
+    p.save(function(err){
+        if(err){
+            console.log(err);
+        }
+    })
 
-app.get("/",function(req,res){
-   
     res.render("home",{page:"home"});
 })
 
@@ -42,56 +59,74 @@ app.get("/login",function(req,res){
 })
 
 app.post("/login",function(req,res){
-    User.find({ho_ten:req.body.email},function(err){
-        if(err){
-            console.log("Wrong username");
+    User.findOne({email:req.body.email}).then(function(user){
+        if(!user){
+            return res.render("login",{message:"Wrong email !!!"})
         }
         else{
-            console.log("1");
-            res.redirect("/");
+            bcrypt.compare(req.body.pass, user.password, function(err, res) {
+                if(res == true){
+                    return res.redirect("/");
+                }else{
+                    return res.render("login",{message:"Wrong password !!!"})
+                }
+            });
         }
     })
 })
 
 // sign up
 app.get("/signup",function(req,res){
-    console.log("get");
     res.render("signup");
 })
 
 app.post("/signup",function(req,res){
-    console.log(req.body.email);
+    console.log(req.body.username);
+    console.log(req.body.pass);
+    User.findOne({username:req.body.username}).then(function(user){
+        if(user){
+            return res.render("signup",{message:"Username already exists !!!"});
+        }
+    })
+
     User.findOne({email:req.body.email}).then(function(user){
-        if(!user){       
-           res.render("signup",{message:""});
+        if(user){       
+            return res.render("signup",{message:"email used !!!"});
         }
-        else{
-            console.log(user);
-            res.render("signup",{message:"email used !!!"});
-        }
+        
     })
 
-    // User.find({username:req.body.name},function(err,item){
-    //     if(err){
-    //         res.render("signup",{message:"Username already exists !!"});
-    //     }else{
-    //         console.log(u);
-    //     }
-    // })
-
-    var u = User({
-        username: req.body.name,
-        email: req.body.email,
-        password: req.body.password,
-        dia_chi: req.body.address
-    })
+    bcrypt.hash(req.body.pass, saltRounds, function(err, hash) {
+        var u = new User({
+            ho_ten: req.body.name,
+            username: req.body.username,
+            email: req.body.email,
+            password: hash,
+            dia_chi: req.body.address,
+            diem: 0
+        })
+        u.save(function(err){
+            if(err){
+                console.log(err);
+            }
+            else{      
+                console.log("else");      
+                return res.redirect("/");
+            }
+        })
+    });
 
     
-    // res.redirect("/");
+    
 })
 
 
 // Category
 app.get("/category",function(req,res){
-    res.render("home",{page:"category"})
+    res.render("home",{page:"category"});
+})
+
+
+app.get("/admin",function(req,res){
+    res.render("admin",{page:"Dashboard"});
 })

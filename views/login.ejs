@@ -50,7 +50,12 @@
                             <span class="focus-input100"></span>
                             <span class="label-input100">Password</span>
                         </div>
-    
+                        
+                        
+                        <% if(typeof message != "undefined") { %>
+                            <span style="color: red;"> <%- message %></span>
+                        <% } %>
+
                         <div class="flex-sb-m w-full p-t-3 p-b-32">
                             <div class="contact100-form-checkbox">
                                 <input class="input-checkbox100" id="ckb1" type="checkbox" name="remember-me">
@@ -65,7 +70,7 @@
                                 </a>
                             </div>
                         </div>
-                
+                        
     
                         <div class="container-login100-form-btn">
                             <button class="login100-form-btn">

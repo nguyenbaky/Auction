@@ -1,6 +1,4 @@
 const mongoose = require("mongoose");
-require('mongoose-double')(mongoose);
-var SchemaTypes = mongoose.Schema.Types;
 
 const userSchema = new mongoose.Schema({
     ho_ten: String,
@@ -9,7 +7,9 @@ const userSchema = new mongoose.Schema({
     username:String,
     email: String,
     password: String,
-    dob:{type:Date}
+    dob:{type:Date},
+    level: Number,
+    is_update: Boolean
 })
 
 module.exports = mongoose.model("User", userSchema);

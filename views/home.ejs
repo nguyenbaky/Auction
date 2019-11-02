@@ -9,10 +9,16 @@
 
 </head>
 <body>
+
     <%- include("./blocks/navbar.ejs") %>
     <%- include("./pages/" + page +".ejs") %>
 
-    
+    <script>
+    $( document ).ready(function() {
+            if(message){
+                alert(message);
+            }
+        }); </script>
 
 <!--===============================================================================================-->
 <script src="vendor/jquery/jquery-3.2.1.min.js"></script>
