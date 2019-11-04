@@ -7,11 +7,7 @@ app.listen(8000);
 
 // body-parser
 var bodyParser = require('body-parser')
-
-// parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
- 
-// parse application/json
 app.use(bodyParser.json())
 
 // mongo
@@ -29,28 +25,59 @@ const User = require("./models/User");
 const Product = require("./models/product");
 const Category = require("./models/category");
 const cate = require("./models/cate");
+const admin = require("./models/admin");
 
 // bcrypt
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
-app.get("/",function(req,res){      
-    var p = new Product({
-        name:"Iphone X",
-        image:"String",
-        price: 5000000,
-        date_begin: 2018-2-11,
-        date_end: 2019-2-11,
-        info: "",
-        description: "Sản phẩm tốt",
-    })
-    p.save(function(err){
-        if(err){
-            console.log(err);
+// jwt 
+var jwt = require('jsonwebtoken');
+var secret = "seasda@$%#$%ad";
+
+// session
+var session = require("express-session");
+app.set('trust proxy', 1) // trust first proxy
+app.use(session({ secret: 'asdxc#$%&dfhd', cookie: { maxAge: 60000 }}))
+
+function handleUserRedirect(req,res,next){
+    if(typeof req.session.token != "undefined"){
+        next();
+    }
+    else{
+        res.redirect("/login");
+    }
+    
+}
+
+function handleAdminRedirect(req,res,next){
+    if(typeof req.session.token_admin != "undefined"){
+        next();
+    }
+    else{
+        res.redirect("/login");
+    }
+    
+}
+
+function handleLevelUser(req,res,next){
+    jwt.verify(req.session.token,secret,function(err,decoded){
+        if(decoded.level > 1){
+            next();
+        }else{
+            res.redirect("/")
         }
     })
+}
 
-    res.render("home",{page:"home"});
+// home
+app.get("/",function(req,res){      
+    res.render("home",{page:"home"});    
+})
+
+// Category
+app.get("/category",function(req,res){
+    res.render("home",{page:"category"});
 })
 
 // login
@@ -59,20 +86,53 @@ app.get("/login",function(req,res){
 })
 
 app.post("/login",function(req,res){
+    var check_user = 1;
+    var check_admin = 1;
     User.findOne({email:req.body.email}).then(function(user){
-        if(!user){
-            return res.render("login",{message:"Wrong email !!!"})
-        }
-        else{
-            bcrypt.compare(req.body.pass, user.password, function(err, res) {
-                if(res == true){
+        if(user){
+            // check user
+            bcrypt.compare(req.body.pass, user.password, function(err, res2) {
+                if(res2 == true){
+                    jwt.sign(user.toJSON(),secret,{expiresIn:'1d'},function(err,token){
+                        if(err){
+                            console.log("Token generate erro: "+ err);
+                        }else{
+                            res.session.token = token;
+                        }
+                    });
                     return res.redirect("/");
+                   
                 }else{
-                    return res.render("login",{message:"Wrong password !!!"})
+                    return res.render("login",{message:"Wrong password !!!"});
                 }
             });
         }
+        else{ // check admin
+            admin.findOne({email:req.body.email}).then(function(admin){
+                if(admin){
+                    bcrypt.compare(req.body.pass, admin.password, function(err, res2) {
+                        if(res2 == true){
+                            jwt.sign(admin.toJSON(),secret,{expiresIn:'1d'},function(err,token){
+                                if(err){
+                                    console.log("Token generate erro: "+ err);
+                                }else{
+                                    req.session.token_admin = token;
+                                    req.session.save();
+                                }
+                            });
+                            return res.redirect("/admin");
+                        }else{
+                            return res.render("login",{message:"Wrong password !!!"});
+                        }
+                    });
+                }
+                else{
+                    return res.render("login",{message:"Wrong email !!!"});
+                }
+            })
+        }
     })
+   
 })
 
 // sign up
@@ -81,52 +141,60 @@ app.get("/signup",function(req,res){
 })
 
 app.post("/signup",function(req,res){
-    console.log(req.body.username);
-    console.log(req.body.pass);
     User.findOne({username:req.body.username}).then(function(user){
         if(user){
             return res.render("signup",{message:"Username already exists !!!"});
+        }else{
+            User.findOne({email:req.body.email}).then(function(user){
+                if(user){   
+                    return res.render("signup",{message:"email used !!!"});
+                }
+                else{
+                    admin.findOne({email:req.body.email}).then(function(admin){
+                        if(admin){       
+                            return res.render("signup",{message:"email used !!!"});
+                        }
+                        else{
+                            bcrypt.hash(req.body.pass, saltRounds, function(err, hash) {
+                                var u = new User({
+                                    ho_ten: req.body.name,
+                                    username: req.body.username,
+                                    email: req.body.email,
+                                    password: hash,
+                                    dia_chi: req.body.address,
+                                    diem: 0
+                                })
+                                u.save(function(err){
+                                    if(err){
+                                        console.log(err);
+                                    }
+                                    else{          
+                                        return res.redirect("/");
+                                    }
+                                })
+                            });
+                        }
+                    })
+                }
+            })
         }
     })
-
-    User.findOne({email:req.body.email}).then(function(user){
-        if(user){       
-            return res.render("signup",{message:"email used !!!"});
-        }
-        
-    })
-
-    bcrypt.hash(req.body.pass, saltRounds, function(err, hash) {
-        var u = new User({
-            ho_ten: req.body.name,
-            username: req.body.username,
-            email: req.body.email,
-            password: hash,
-            dia_chi: req.body.address,
-            diem: 0
-        })
-        u.save(function(err){
-            if(err){
-                console.log(err);
-            }
-            else{      
-                console.log("else");      
-                return res.redirect("/");
-            }
-        })
-    });
-
-    
-    
 })
 
-
-// Category
-app.get("/category",function(req,res){
-    res.render("home",{page:"category"});
+// product
+app.get("/add-product",handleUserRedirect,function(req,res){
+    res.render("home");
 })
 
-
-app.get("/admin",function(req,res){
+// admin
+app.get("/admin",handleAdminRedirect,function(req,res){
     res.render("admin",{page:"Dashboard"});
+})
+
+app.get("/admin/cate",handleAdminRedirect,function(req,res){
+    res.render("admin",{page:"Cate"});
+})
+
+app.get("/admin/cate/:category",handleAdminRedirect,function(req,res){
+    res.removeHeader("admin",{page:"Category",Category:category});
 })
