@@ -38,7 +38,7 @@ var secret = "seasda@$%#$%ad";
 // session
 var session = require("express-session");
 app.set('trust proxy', 1) // trust first proxy
-app.use(session({ secret: 'asdxc#$%&dfhd', cookie: { maxAge: 60000 }}))
+app.use(session({ secret: 'asdxc#$%&dfhd', cookie: { maxAge: 3600000 }}))
 
 function handleUserRedirect(req,res,next){
     if(typeof req.session.token != "undefined"){
@@ -196,5 +196,5 @@ app.get("/admin/cate",handleAdminRedirect,function(req,res){
 })
 
 app.get("/admin/cate/:category",handleAdminRedirect,function(req,res){
-    res.removeHeader("admin",{page:"Category",Category:category});
+    res.render("admin",{page:"Category",category:req.params.category});
 })
