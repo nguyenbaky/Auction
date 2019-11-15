@@ -16,4 +16,10 @@ $(document).ready(function(){
             }
         });
     });
+    $(".edit").click(function(e){
+        e.preventDefault();;
+    })
+    $(".delete").click(function(e){
+        e.preventDefault();;
+    })
 });

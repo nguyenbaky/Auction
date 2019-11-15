@@ -45,35 +45,39 @@ var session = require("express-session");
 app.set('trust proxy', 1) // trust first proxy
 app.use(session({ secret: 'asdxc#$%&dfhd', cookie: { maxAge: 3600000 }}))
 
-function handleUserRedirect(req,res,next){
-    if(typeof req.session.token != "undefined"){
-        next();
-    }
-    else{
-        res.redirect("/login");
-    }
-    
-}
+//////////////////////////////////////////////////////////////////////////////////////////
+// function handleUserRedirect(req,res,next){
+//     if(typeof req.session.token != "undefined"){
+//         next();
+//     }
+//     else{
+//         res.redirect("/login");
+//     }    
+// }
+//////////////////////////////////////////////////////////////////////////////////////////
 
-function handleAdminRedirect(req,res,next){
-    if(typeof req.session.token_admin != "undefined"){
-        next();
-    }
-    else{
-        res.redirect("/login");
-    }
-    
-}
+//////////////////////////////////////////////////////////////////////////////////////////
+// function handleAdminRedirect(req,res,next){
+//     if(typeof req.session.token_admin != "undefined"){
+//         next();
+//     }
+//     else{
+//         res.redirect("/login");
+//     } 
+// }
+//////////////////////////////////////////////////////////////////////////////////////////
 
-function handleLevelUser(req,res,next){
-    jwt.verify(req.session.token,secret,function(err,decoded){
-        if(decoded.level > 1){
-            next();
-        }else{
-            res.redirect("/")
-        }
-    })
-}
+//////////////////////////////////////////////////////////////////////////////////////////
+// function handleLevelUser(req,res,next){
+//     jwt.verify(req.session.token,secret,function(err,decoded){
+//         if(decoded.level > 1){
+//             next();
+//         }else{
+//             res.redirect("/")
+//         }
+//     })
+// }
+//////////////////////////////////////////////////////////////////////////////////////////
 
 // home
 app.get("/",function(req,res){      
@@ -191,7 +195,7 @@ app.get("/signup",function(req,res){
 //////////////////////////////////////////////////////////////////////////////////////////
 
 // product
-app.get("/add-product",handleUserRedirect,function(req,res){
+app.get("/add-product",function(req,res){
     res.render("home");
 })
 
@@ -200,8 +204,8 @@ app.get("/admin",function(req,res){
     res.render("admin",{page:"Dashboard"});
 })
 
-app.get("/admin/category",function(req,res){
-    res.render("admin",{page:"Category"});
+app.get("/admin/cate",function(req,res){
+    res.render("admin",{page:"Cate"});
 })
 
 app.get("/admin/cate/:category",function(req,res){
