@@ -3,29 +3,34 @@ var app = express();
 app.set("view engine","ejs");
 app.set("views","./views");
 app.use(express.static("public"));
-app.listen(8000);
+app.listen(8000,function(){
+    console.log("Running on local host 8000 !!!");
+});
 
 // body-parser
 var bodyParser = require('body-parser')
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
-// mongo
-var mongoose = require("mongoose");
-mongoose.connect("mongodb+srv://nguyen:JrZm8cSs8bsWHv1Q@cluster0-f0jha.mongodb.net/auction?retryWrites=true&w=majority",{useNewUrlParser:true,useUnifiedTopology: true },function(err){
-    if(err){
-        console.log("Mongo connected error: "+err);
-    }else{
-        console.log("Connected succesful.");
-    }
-})
+///////////////////////////////////// mongo ///////////////////////////////////////
+// var mongoose = require("mongoose");
+// mongoose.connect("mongodb+srv://nguyen:JrZm8cSs8bsWHv1Q@cluster0-f0jha.mongodb.net/auction?retryWrites=true&w=majority",{useNewUrlParser:true,useUnifiedTopology: true },function(err){
+//     if(err){
+//         console.log("Mongo connected error: "+err);
+//     }else{
+//         console.log("Connected succesful.");
+//     }
+// })
+//////////////////////////////////////////////////////////////////////////////////////////
 
-// model
-const User = require("./models/User");
-const Product = require("./models/product");
-const Category = require("./models/category");
-const cate = require("./models/cate");
-const admin = require("./models/admin");
+
+/////////////////////////////////// model ////////////////////////////////////////////////
+// const User = require("./models/User");
+// const Product = require("./models/product");
+// const Category = require("./models/category");
+// const cate = require("./models/cate");
+// const admin = require("./models/admin");
+//////////////////////////////////////////////////////////////////////////////////////////
 
 // bcrypt
 const bcrypt = require('bcrypt');
@@ -85,101 +90,105 @@ app.get("/login",function(req,res){
     res.render("login");
 })
 
-app.post("/login",function(req,res){
-    var check_user = 1;
-    var check_admin = 1;
-    User.findOne({email:req.body.email}).then(function(user){
-        if(user){
-            // check user
-            bcrypt.compare(req.body.pass, user.password, function(err, res2) {
-                if(res2 == true){
-                    jwt.sign(user.toJSON(),secret,{expiresIn:'1d'},function(err,token){
-                        if(err){
-                            console.log("Token generate erro: "+ err);
-                        }else{
-                            res.session.token = token;
-                        }
-                    });
-                    return res.redirect("/");
+//////////////////////////////////////////////////////////////////////////////////////////
+// app.post("/login",function(req,res){
+//     var check_user = 1;
+//     var check_admin = 1;
+//     User.findOne({email:req.body.email}).then(function(user){
+//         if(user){
+//             // check user
+//             bcrypt.compare(req.body.pass, user.password, function(err, res2) {
+//                 if(res2 == true){
+//                     jwt.sign(user.toJSON(),secret,{expiresIn:'1d'},function(err,token){
+//                         if(err){
+//                             console.log("Token generate erro: "+ err);
+//                         }else{
+//                             res.session.token = token;
+//                         }
+//                     });
+//                     return res.redirect("/");
                    
-                }else{
-                    return res.render("login",{message:"Wrong password !!!"});
-                }
-            });
-        }
-        else{ // check admin
-            admin.findOne({email:req.body.email}).then(function(admin){
-                if(admin){
-                    bcrypt.compare(req.body.pass, admin.password, function(err, res2) {
-                        if(res2 == true){
-                            jwt.sign(admin.toJSON(),secret,{expiresIn:'1d'},function(err,token){
-                                if(err){
-                                    console.log("Token generate erro: "+ err);
-                                }else{
-                                    req.session.token_admin = token;
-                                    req.session.save();
-                                }
-                            });
-                            return res.redirect("/admin");
-                        }else{
-                            return res.render("login",{message:"Wrong password !!!"});
-                        }
-                    });
-                }
-                else{
-                    return res.render("login",{message:"Wrong email !!!"});
-                }
-            })
-        }
-    })
-   
-})
+//                 }else{
+//                     return res.render("login",{message:"Wrong password !!!"});
+//                 }
+//             });
+//         }
+//         else{ // check admin
+//             admin.findOne({email:req.body.email}).then(function(admin){
+//                 if(admin){
+//                     bcrypt.compare(req.body.pass, admin.password, function(err, res2) {
+//                         if(res2 == true){
+//                             jwt.sign(admin.toJSON(),secret,{expiresIn:'1d'},function(err,token){
+//                                 if(err){
+//                                     console.log("Token generate erro: "+ err);
+//                                 }else{
+//                                     req.session.token_admin = token;
+//                                     req.session.save();
+//                                 }
+//                             });
+//                             return res.redirect("/admin");
+//                         }else{
+//                             return res.render("login",{message:"Wrong password !!!"});
+//                         }
+//                     });
+//                 }
+//                 else{
+//                     return res.render("login",{message:"Wrong email !!!"});
+//                 }
+//             })
+//         }
+//     })   
+// })
+//////////////////////////////////////////////////////////////////////////////////////////
+
 
 // sign up
 app.get("/signup",function(req,res){
     res.render("signup");
 })
 
-app.post("/signup",function(req,res){
-    User.findOne({username:req.body.username}).then(function(user){
-        if(user){
-            return res.render("signup",{message:"Username already exists !!!"});
-        }else{
-            User.findOne({email:req.body.email}).then(function(user){
-                if(user){   
-                    return res.render("signup",{message:"email used !!!"});
-                }
-                else{
-                    admin.findOne({email:req.body.email}).then(function(admin){
-                        if(admin){       
-                            return res.render("signup",{message:"email used !!!"});
-                        }
-                        else{
-                            bcrypt.hash(req.body.pass, saltRounds, function(err, hash) {
-                                var u = new User({
-                                    ho_ten: req.body.name,
-                                    username: req.body.username,
-                                    email: req.body.email,
-                                    password: hash,
-                                    dia_chi: req.body.address,
-                                    diem: 0
-                                })
-                                u.save(function(err){
-                                    if(err){
-                                        console.log(err);
-                                    }
-                                    else{          
-                                        return res.redirect("/");
-                                    }
-                                })
-                            });
-                        }
-                    })
-                }
-            })
-        }
-    })
-})
+//////////////////////////////////////////////////////////////////////////////////////////
+// app.post("/signup",function(req,res){
+//     User.findOne({username:req.body.username}).then(function(user){
+//         if(user){
+//             return res.render("signup",{message:"Username already exists !!!"});
+//         }else{
+//             User.findOne({email:req.body.email}).then(function(user){
+//                 if(user){   
+//                     return res.render("signup",{message:"email used !!!"});
+//                 }
+//                 else{
+//                     admin.findOne({email:req.body.email}).then(function(admin){
+//                         if(admin){       
+//                             return res.render("signup",{message:"email used !!!"});
+//                         }
+//                         else{
+//                             bcrypt.hash(req.body.pass, saltRounds, function(err, hash) {
+//                                 var u = new User({
+//                                     ho_ten: req.body.name,
+//                                     username: req.body.username,
+//                                     email: req.body.email,
+//                                     password: hash,
+//                                     dia_chi: req.body.address,
+//                                     diem: 0
+//                                 })
+//                                 u.save(function(err){
+//                                     if(err){
+//                                         console.log(err);
+//                                     }
+//                                     else{          
+//                                         return res.redirect("/");
+//                                     }
+//                                 })
+//                             });
+//                         }
+//                     })
+//                 }
+//             })
+//         }
+//     })
+// })
+//////////////////////////////////////////////////////////////////////////////////////////
 
 // product
 app.get("/add-product",handleUserRedirect,function(req,res){
@@ -187,14 +196,14 @@ app.get("/add-product",handleUserRedirect,function(req,res){
 })
 
 // admin
-app.get("/admin",handleAdminRedirect,function(req,res){
+app.get("/admin",function(req,res){
     res.render("admin",{page:"Dashboard"});
 })
 
-app.get("/admin/cate",handleAdminRedirect,function(req,res){
-    res.render("admin",{page:"Cate"});
+app.get("/admin/category",function(req,res){
+    res.render("admin",{page:"Category"});
 })
 
-app.get("/admin/cate/:category",handleAdminRedirect,function(req,res){
+app.get("/admin/cate/:category",function(req,res){
     res.render("admin",{page:"Category",category:req.params.category});
 })
