@@ -211,3 +211,7 @@ app.get("/admin/cate",function(req,res){
 app.get("/admin/cate/:category",function(req,res){
     res.render("admin",{page:"Category",category:req.params.category});
 })
+
+app.get("/admin/users",function(req,res){
+    res.render("admin",{page:"User"});
+})
