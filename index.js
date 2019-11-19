@@ -204,14 +204,18 @@ app.get("/admin",function(req,res){
     res.render("admin",{page:"Dashboard"});
 })
 
-app.get("/admin/cate",function(req,res){
-    res.render("admin",{page:"Cate"});
+app.get("/admin/category",function(req,res){
+    res.render("admin",{page:"Category"});
 })
 
-app.get("/admin/cate/:category",function(req,res){
-    res.render("admin",{page:"Category",category:req.params.category});
+app.get("/admin/category/:category",function(req,res){
+    res.render("admin",{page:"Category_2",category:req.params.category});
 })
 
 app.get("/admin/users",function(req,res){
     res.render("admin",{page:"User"});
+})
+
+app.get("/admin/request",function(req,res){
+    res.render("admin",{page:"Request"});
 })

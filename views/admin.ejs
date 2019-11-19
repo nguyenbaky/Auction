@@ -30,7 +30,12 @@
             <div id="page-inner">
                 <div class="row">
                     <div class="col-md-12">
-                     <h2><%- page %> </h2>   
+                     <% if(typeof(category) !== "undefined") { %>
+                        <h2><%- category %> </h2>
+                      <% }else{ %>
+                        <h2><%- page %></h2> 
+                      <% } %>   
+
                     </div>
                 </div>              
                  <!-- /. ROW  -->

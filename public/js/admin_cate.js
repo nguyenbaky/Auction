@@ -1,4 +1,7 @@
 $(document).ready(function(){
+
+    var is_edit = 0;
+    var is_add = 0;
 	// Activate tooltips
 	$('[data-toggle="tooltip"]').tooltip();
     
@@ -18,7 +21,10 @@ $(document).ready(function(){
     });
     $(document).on('click', '.edit', function(e) {
         e.preventDefault();
+        is_edit = 1;
+        $(this).closest("tr").addClass("edited");
         $(this).closest("tr").find(".editRow").attr('contenteditable','true');
+        $(this).closest("tr").find(".editRow").find('[name="level"]').removeAttr('disabled')
         $(this).closest("tr").find(".editRow").first().focus();        
     });
 
@@ -33,36 +39,46 @@ $(document).ready(function(){
     });
 
     $(".save").click(function(e){
-
+        if(is_add === 0 && is_edit === 0 ) return;
+        if(is_add !== 0) is_add = 0;
+        if(is_edit !== 0) {
+            is_edit = 0;
+            $("#myTable").find(".edited").find(".editRow").attr('contenteditable','false');
+            $("#myTable").find(".edited").find('[name="level"]').attr('disabled','disabled');
+        }
     })
 
     $(".add").click(function(e){
+        if(is_add != 0) return;
+        is_add += 1;
         var cols = $("#myTable").find("th").length;
         var rows = $("#myTable").find("tr").length;
         var table = $("#myTable");
         table.find('tbody').append("<tr>");
         if(rows % 2 == 1){
             table.find('tbody').find("tr").last().append("<td contenteditable='true' style='padding:8px;padding-left:8px;border-top: 1px solid #ddd;background-color:#f9f9f9'>"+rows+"</td>");
-        }
-        else{
-            table.find('tbody').find("tr").last().append("<td contenteditable='true' style='padding:8px;padding-left:8px;border-top: 1px solid #ddd'>"+rows+"</td>");
-        }
-
-        for(var i = 1;i < cols - 1;i++){
-            if(rows % 2 == 1){
-                table.find('tbody').find("tr").last().append("<td style='padding:8px;padding-left:8px;border-top: 1px solid #ddd;background-color:#f9f9f9' contenteditable='true'></td>");
-            }
-            else{
-                table.find('tbody').find("tr").last().append("<td style='padding:8px;padding-left:8px;border-top: 1px solid #ddd' contenteditable='true'></td>");
-            }
-        }
-
-        if(rows % 2 == 1){
+            table.find('tbody').find("tr").last().append("<td contenteditable='true' style='padding:8px;padding-left:8px;border-top: 1px solid #ddd;background-color:#f9f9f9'></td>");
+            table.find('tbody').find("tr").last().append("<td contenteditable='true' style='padding:8px;padding-left:8px;border-top: 1px solid #ddd;background-color:#f9f9f9'>"+
+                '<select name="level">'+
+                    '<option value="Bidder">Bidder</option>'+
+                    '<option value="Seller">Seller</option>'+                     
+                '</select>'+
+            "</td>");
+            table.find('tbody').find("tr").last().append("<td contenteditable='true' style='padding:8px;padding-left:8px;border-top: 1px solid #ddd;background-color:#f9f9f9'></td>");
             table.find('tbody').find("tr").last().append('<td style="padding:8px;padding-left:8px;border-top: 1px solid #ddd;background-color:#f9f9f9"><a href="#" class="edit" title="Edit" data-toggle="tooltip" "><i class="material-icons">&#xE254;</i></a><a href="#" class="delete" title="Delete" data-toggle="tooltip" style="padding-left:5px"><i class="material-icons">&#xE872;</i></a></td>');
         }
         else{
+            table.find('tbody').find("tr").last().append("<td contenteditable='true' style='padding:8px;padding-left:8px;border-top: 1px solid #ddd'>"+rows+"</td>");
+            table.find('tbody').find("tr").last().append("<td contenteditable='true' style='padding:8px;padding-left:8px;border-top: 1px solid #ddd'></td>");
+            table.find('tbody').find("tr").last().append("<td contenteditable='true' style='padding:8px;padding-left:8px;border-top: 1px solid #ddd'>"+
+                '<select name="level">'+
+                    '<option value="Bidder">Bidder</option>'+
+                    '<option value="Seller">Seller</option>'+                     
+                '</select>'+
+            "</td>");
+            table.find('tbody').find("tr").last().append("<td contenteditable='true' style='padding:8px;padding-left:8px;border-top: 1px solid #ddd'></td>");
             table.find('tbody').find("tr").last().append('<td style="padding:8px;padding-left:8px;border-top: 1px solid #ddd"><a href="#" class="edit" title="Edit" data-toggle="tooltip" "><i class="material-icons">&#xE254;</i></a><a href="#" class="delete" title="Delete" data-toggle="tooltip" style="padding-left:5px"><i class="material-icons">&#xE872;</i></a></td>');
-        }
+        }        
        table.find('tbody').append("</tr>");
 
     })
