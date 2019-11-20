@@ -1,0 +1,80 @@
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+    <li class="nav-item">
+        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Profile</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Change Password</a>
+    </li>
+</ul>
+
+<div class="tab-content" id="myTabContent">
+    <div class="tab-pane active" id="home" aria-labelledby="home-tab" role="tabpanel">         
+        <div class="form" id="registrationForm">
+            <div class="form-group">
+                <div class="col-sm-6">
+                <label htmlFor="first_name" ><h4>Username</h4></label>
+                <input type="text" class="form-control"  name="first_name" id="first_name" placeholder="enter your first name"  title="enter your first name if any."  />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-6">
+                <label htmlFor="last_name" ><h4>Email</h4></label>
+                <input type="email" class="form-control" name="last_name" id="last_name" placeholder="enter your last name"  title="enter your last name if any." }/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-6">
+                <label htmlFor="phone" ><h4>Phone</h4></label>
+                <input type="number" class="form-control"  name="phone" id="phone" placeholder="enter phone" title="enter your phone number if any." />
+                </div>
+            </div>
+
+            <div class="form-group" style="padding: 10px;">
+                <button class="btn btn-lg btn-success" ><i class="glyphicon glyphicon-ok-sign" /> Save</button>
+                <button class="btn btn-lg" type="reset"><i class="glyphicon glyphicon-repeat" /> Reset</button>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div> 
+
+    <div class="tab-pane fade" id="profile" aria-labelledby="profile-tab" role="tabpanel">
+        <div class="form" id="registrationForm" style="padding: 10px!important;" autocomplete='off' >        
+            <div class="row">
+                <div class="col-sm-6">
+                <label ><h4>Current password</h4></label>
+                <input class="form-control" type="password" minLength="8" name="oldpassword" placeholder="Password must be over 6 characters" id='oldpassword'  />
+                </div>
+                <div class="col-sm-6">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                <label ><h4>New password</h4></label>
+                <input class="form-control"  type="password" minLength="8"  name="newpassword" placeholder="Password must be over 6 characters" id='newpassword' />
+                </div>
+                <div class="col-sm-6">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                <label ><h4>Confirm new password</h4></label>
+                <input class="form-control"  type="password" minLength="8" name="confirmnewpassword" placeholder="Password must be over 6 characters" id='confirmnewpassword' />
+                </div>
+                <div class="col-sm-6">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-xs-12" style="padding-top: 10px;">            
+                    <div>
+                    <button class="btn btn-lg btn-success"><i class="glyphicon glyphicon-ok-sign" />Change</button>
+                    </div>
+                </div>
+            </div>
+        </div>       
+    </div>
+</div>
+

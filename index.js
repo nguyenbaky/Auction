@@ -195,9 +195,28 @@ app.get("/signup",function(req,res){
 //////////////////////////////////////////////////////////////////////////////////////////
 
 // product
-app.get("/add-product",function(req,res){
-    res.render("home");
+// Hiện thông tin sản phẩm đã bán
+app.get("/product",function(req,res){
+    res.render("home",{page:"product"});
 })
+// Thêm sản phẩm bán
+app.get("/add-product",function(req,res){
+    res.render("pages/add_product",{page:"add_product"});
+})
+// Hiện thông tin sản phẩm đã đặt
+app.get("/auction",function(req,res){
+    res.render("home",{page:"product_auction"})
+})
+
+//profile
+app.get("/profile",function(req,res){
+    res.render("home",{page:"profile"});
+})
+
+app.get("/chi-tiet-san-pham/:product",function(req,res){
+
+})
+
 
 // admin
 app.get("/admin",function(req,res){
