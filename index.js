@@ -203,10 +203,15 @@ app.get("/product",function(req,res){
 app.get("/add-product",function(req,res){
     res.render("pages/add_product",{page:"add_product"});
 })
-// Hiện thông tin sản phẩm đã đặt
+// Hiện thông tin sản phẩm đã đấu giá
 ///// /aition/:user
 app.get("/auction",function(req,res){
     res.render("home",{page:"product_auction"})
+})
+
+// aution-success/:user :Danh sách sản phẩm đấu giá thành công
+app.get("aution-success",function(req,res){
+    res.render("home",{page:"success"});
 })
 
 //profile
