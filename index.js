@@ -213,10 +213,9 @@ app.get("/profile",function(req,res){
     res.render("home",{page:"profile"});
 })
 
-app.get("/chi-tiet-san-pham/:product",function(req,res){
-
+app.get("/chi-tiet-san-pham/:id_product",function(req,res){
+    res.render("home",{page:"product_detail",id:req.params.id_product});
 })
-
 
 // admin
 app.get("/admin",function(req,res){

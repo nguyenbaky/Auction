@@ -43,7 +43,8 @@
             <div class="row">
                 <div class="col-sm-6">
                 <label ><h4>Current password</h4></label>
-                <input class="form-control" type="password" minLength="8" name="oldpassword" placeholder="Password must be over 6 characters" id='oldpassword'  />
+                <input class="form-control" type="password" minLength="8" name="oldpassword" readonly
+                placeholder="Password must be over 6 characters" id='oldpassword' onfocus="this.removeAttribute('readonly');" />
                 </div>
                 <div class="col-sm-6">
                 </div>
