@@ -1,9 +1,12 @@
 <ul class="nav nav-tabs" id="myTab" role="tablist">
     <li class="nav-item">
-        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Profile</a>
+        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Thông tin</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Change Password</a>
+        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Đổi mật khẩu</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" id="score-tab" data-toggle="tab" href="#score" role="tab" aria-controls="score" aria-selected="false">Điểm đánh giá</a>
     </li>
 </ul>
 
@@ -13,13 +16,25 @@
             <div class="form-group">
                 <div class="col-sm-6">
                 <label htmlFor="first_name" ><h4>Username</h4></label>
-                <input type="text" class="form-control"  name="first_name" id="first_name" placeholder="enter your first name"  title="enter your first name if any."  />
+                <input type="text" class="form-control"  name="user_name" id="user_name" placeholder="enter your user name"  title="enter your first name if any."  />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-6">
+                <label htmlFor="first_name" ><h4>Họ tên</h4></label>
+                <input type="text" class="form-control"  name="name" id="name" placeholder="enter your name"  title="enter your first name if any."  />
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-sm-6">
                 <label htmlFor="last_name" ><h4>Email</h4></label>
-                <input type="email" class="form-control" name="last_name" id="last_name" placeholder="enter your last name"  title="enter your last name if any." }/>
+                <input type="email" class="form-control" name="last_name" id="last_name" placeholder="enter your email"  title="enter your last name if any." }/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-6">
+                <label htmlFor="first_name" ><h4>Địa chỉ</h4></label>
+                <input type="text" class="form-control"  name="address" id="address" placeholder="enter your first name"  title="enter your first name if any."  />
                 </div>
             </div>
             <div class="form-group">
@@ -76,6 +91,10 @@
                 </div>
             </div>
         </div>       
+    </div>
+
+    <div class="tab-pane fade" id="score" aria-labelledby="score-tab" role="tabpanel">
+        10
     </div>
 </div>
 

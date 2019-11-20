@@ -204,6 +204,7 @@ app.get("/add-product",function(req,res){
     res.render("pages/add_product",{page:"add_product"});
 })
 // Hiện thông tin sản phẩm đã đặt
+///// /aition/:user
 app.get("/auction",function(req,res){
     res.render("home",{page:"product_auction"})
 })
@@ -213,8 +214,14 @@ app.get("/profile",function(req,res){
     res.render("home",{page:"profile"});
 })
 
-app.get("/chi-tiet-san-pham/:id_product",function(req,res){
-    res.render("home",{page:"product_detail",id:req.params.id_product});
+//// /chi-tiet-san-pham/:id_product
+app.get("/chi-tiet-san-pham",function(req,res){
+    res.render("home",{page:"product_detail"});
+})
+
+//// /favorite/:user
+app.get("/favorite/",function(req,res){
+    res.render("home",{page:"favorite"});
 })
 
 // admin
