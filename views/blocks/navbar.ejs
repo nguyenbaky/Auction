@@ -1,59 +1,61 @@
+<base href="http://localhost:8000/">
 <nav class="navbar navbar-expand-lg navbar-light " style="background-color:rgb(140, 185, 185);">
-        <a class="navbar-brand" href="/">Auction</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+    <a class="navbar-brand" href="/">Auction</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+            <a class="nav-link" href="/">Trang chủ<span class="sr-only">(current)</span></a>
+        </li>
+    
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="/category" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Thể loại
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="#">Books</a>
+            <a class="dropdown-item" href="#">Mobiles</a>
+            <a class="dropdown-item" href="#">Laptops</a>
+            <a class="dropdown-item" href="#">Clothes</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="#">Something else here</a>
+            </div>
+        </li>
+        <li class="nav-item active">
+            <a class="nav-link" href="/profile">Thông tin<span class="sr-only">(current)</span></a>
+        </li>
+
+        <!-- bidder -->
+        <li class="nav-item active">
+            <a class="nav-link" href="/auction">Sản phẩm đang đấu giá<span class="sr-only">(current)</span></a>
+        </li>
+
+        <li class="nav-item active">
+            <a class="nav-link" href="/auction-success">Đấu giá thành công<span class="sr-only">(current)</span></a>
+        </li>
+
+        <li class="nav-item active">
+            <a class="nav-link" href="/favorite">Yêu thích<span class="sr-only">(current)</span></a>
+        </li>
+        <!-- seller -->
+        <li class="nav-item active">
+            <a class="nav-link" href="/product">Sản phẩm đang bán<span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item active">
+            <a class="nav-link" href="/product-sold">Sản phẩm đã bán<span class="sr-only">(current)</span></a>
+        </li>
+
         
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-                <a class="nav-link" href="/">Trang chủ<span class="sr-only">(current)</span></a>
-            </li>
-        
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="/category" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Thể loại
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="#">Books</a>
-                <a class="dropdown-item" href="#">Mobiles</a>
-                <a class="dropdown-item" href="#">Laptops</a>
-                <a class="dropdown-item" href="#">Clothes</a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#">Something else here</a>
-                </div>
-            </li>
-            <li class="nav-item active">
-                <a class="nav-link" href="/profile">Thông tin<span class="sr-only">(current)</span></a>
-            </li>
-
-            <!-- bidder -->
-            <li class="nav-item active">
-                <a class="nav-link" href="/auction">Sản phẩm đang đấu giá<span class="sr-only">(current)</span></a>
-            </li>
-
-            <li class="nav-item active">
-                <a class="nav-link" href="/auction">Đấu giá thành công<span class="sr-only">(current)</span></a>
-            </li>
-
-            <li class="nav-item active">
-                <a class="nav-link" href="/favorite">Yêu thích<span class="sr-only">(current)</span></a>
-            </li>
-            <!-- seller -->
-            <li class="nav-item active">
-                <a class="nav-link" href="/product">Sản phẩm bán<span class="sr-only">(current)</span></a>
-            </li>
-
-            
-            
-            
-            </ul>
-            <form class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-            </form>
-            <a class="nav-link" href="/admin">Admin</a>
-            <a class="nav-link" href="/login">Sign in</a>
-            <a class="nav-link" href="/signup">Sign up</a>
-        </div>
-    </nav>
+        </ul>
+        <form class="form-inline my-2 my-lg-0">
+        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
+        <a class="nav-link" href="/admin">Admin</a>
+        <a class="nav-link" href="/login">Sign in</a>
+        <a class="nav-link" href="/signup">Sign up</a>
+    </div>
+</nav>

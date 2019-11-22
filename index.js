@@ -195,10 +195,14 @@ app.get("/signup",function(req,res){
 //////////////////////////////////////////////////////////////////////////////////////////
 
 // product
-// Hiện thông tin sản phẩm đã bán
+// Hiện thông tin sản phẩm đang bán
 app.get("/product",function(req,res){
     res.render("home",{page:"product"});
 })
+app.get("/product-sold",function(req,res){
+    res.render("home",{page:"sold_product"});
+})
+
 // Thêm sản phẩm bán
 app.get("/add-product",function(req,res){
     res.render("pages/add_product",{page:"add_product"});
@@ -210,7 +214,7 @@ app.get("/auction",function(req,res){
 })
 
 // aution-success/:user :Danh sách sản phẩm đấu giá thành công
-app.get("aution-success",function(req,res){
+app.get("/auction-success",function(req,res){
     res.render("home",{page:"success"});
 })
 
