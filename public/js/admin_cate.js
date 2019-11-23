@@ -22,7 +22,10 @@ $(document).ready(function(){
     
     $(document).on('click', '.edit', function(e) {
         e.preventDefault();
-        if(is_edit != 0) return;
+        if(is_edit != 0) {
+            alert("Please save before edit another one");
+            return;
+        }
         is_edit = 1;
         $(this).closest("tr").addClass("edited");
         $(this).closest("tr").find(".editRow").attr('contenteditable','true');
@@ -88,7 +91,10 @@ $(document).ready(function(){
     })
 
     $(".add").click(function(e){
-        if(is_add != 0) return;
+        if(is_add != 0){
+            alert("Please save before add another one !!!");
+            return;
+        } 
         is_add += 1;
         var rows = $("#myTable").find("tr").length;
         $("table tbody").append("<tr>");
