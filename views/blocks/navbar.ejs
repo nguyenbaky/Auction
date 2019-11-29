@@ -24,38 +24,47 @@
             <a class="dropdown-item" href="#">Something else here</a>
             </div>
         </li>
-        <li class="nav-item active">
-            <a class="nav-link" href="/profile">Thông tin<span class="sr-only">(current)</span></a>
-        </li>
 
         <!-- bidder -->
-        <li class="nav-item active">
-            <a class="nav-link" href="/auction">Sản phẩm đang đấu giá<span class="sr-only">(current)</span></a>
-        </li>
+        <% if(typeof user != "undefined") { %>
+            <li class="nav-item active">
+                <a class="nav-link" href="/profile">Thông tin<span class="sr-only">(current)</span></a>
+            </li>
+  
+            <li class="nav-item active">
+                <a class="nav-link" href="/auction">Sản phẩm đang đấu giá<span class="sr-only">(current)</span></a>
+            </li>
+            
+            <li class="nav-item active">
+                <a class="nav-link" href="/auction/success">Đấu giá thành công<span class="sr-only">(current)</span></a>
+            </li>
 
-        <li class="nav-item active">
-            <a class="nav-link" href="/auction-success">Đấu giá thành công<span class="sr-only">(current)</span></a>
-        </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="/favorite">Yêu thích<span class="sr-only">(current)</span></a>
+            </li>
+        <% } %>
 
-        <li class="nav-item active">
-            <a class="nav-link" href="/favorite">Yêu thích<span class="sr-only">(current)</span></a>
-        </li>
         <!-- seller -->
-        <li class="nav-item active">
-            <a class="nav-link" href="/product">Sản phẩm đang bán<span class="sr-only">(current)</span></a>
-        </li>
-        <li class="nav-item active">
-            <a class="nav-link" href="/product-sold">Sản phẩm đã bán<span class="sr-only">(current)</span></a>
-        </li>
-
+        <% if(typeof seller != "undefined") { %>
+            <li class="nav-item active">
+                <a class="nav-link" href="/product">Sản phẩm đang bán<span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="/product/sold">Sản phẩm đã bán<span class="sr-only">(current)</span></a>
+            </li>
+        <% } %>
         
         </ul>
         <form class="form-inline my-2 my-lg-0">
         <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
         <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
         </form>
-        <a class="nav-link" href="/admin">Admin</a>
-        <a class="nav-link" href="/login">Sign in</a>
-        <a class="nav-link" href="/signup">Sign up</a>
+        <% if(typeof user === "undefined") { %>
+            <a class="nav-link" href="/login">Sign in</a>
+            <a class="nav-link" href="/signup">Sign up</a>
+        <% }else{  %>
+            <a class="nav-link" href="/logout">Logout</a>
+        <% } %>
+
     </div>
 </nav>

@@ -1,15 +1,21 @@
 const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema({
-    ho_ten: String,
-    dia_chi: String,
-    diem: Number,
-    username:String,
+    username:String,    
     email: String,
+    ho_ten: String,
+    is_update: Boolean,
+    dia_chi: String,
     password: String,
-    dob:{type:Date},
+    sp_Dang_Dau_Gia:[{type:mongoose.Schema.Types.ObjectId}],
+    sp_Dau_Gia_Thanh_Cong:[{type:mongoose.Schema.Types.ObjectId}],
+    sp_Yeu_Thich:[{type:mongoose.Schema.Types.ObjectId}],
+    sp_Dang_Ban:[{type:mongoose.Schema.Types.ObjectId}],
+    sp_Da_Ban:[{type:mongoose.Schema.Types.ObjectId}],
     level: Number,
-    is_update: Boolean
+    dob:{type:Date},
+    comment:[{type:mongoose.Schema.Types.String}],
+    diem_danh_gia: Number,
 })
 
 module.exports = mongoose.model("User", userSchema);

@@ -1,9 +1,8 @@
 $(document).ready(function(){
-
     var is_edit = 0;
     var is_add = 0;
 	// Activate tooltips
-	$('[data-toggle="tooltip"]').tooltip();
+    $('[data-toggle="tooltip"]').tooltip();
     
 	// Filter table rows based on searched term
     $("#search").on("keyup", function() {
