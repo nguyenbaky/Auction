@@ -51,7 +51,6 @@ app.use(session({ secret: 'asdxc#$%&dfhd', cookie: { maxAge: 3600000 }}))
 
 function handleUserRedirect(req,res,next){
     if(typeof req.session.token != "undefined"){
-        console.log(req.session.token);
         next();
     }
     else{
@@ -78,17 +77,40 @@ function handleLevelUser(req,res,next){
     })
 }
 
+function passIdUser(req,res,next){
+    jwt.verify(req.session.token,secret,function(err,decoded){
+        res.locals.userID = decoded._id
+        next();
+    })
+}
+
+function checkLvUser(req,res,next){
+    if(typeof req.session.token === "undefined"){
+        res.locals.level = 0;
+    }
+    else{
+        jwt.verify(req.session.token,secret,function(err,decoded){
+            res.locals.level = decoded.level;
+            res.locals._id = decoded._id;
+        })
+    }    
+    next();
+}
+
 app.get("/",function(req,res){ 
     if(typeof req.session.token != "undefined"){     
         jwt.verify(req.session.token,secret,function(err,decoded){
             if(decoded.level > 1){
-                res.render("home",{page:"home",user:true,seller:true})
+                // Seller
+                res.render("home",{page:"home",user:true,seller:true,_id:decoded._id})
             }else{
-                res.render("home",{page:"home",user:true})
+                // Bidder
+                res.render("home",{page:"home",user:true,_id:decoded._id})
             }
         })  
     }
     else{
+        // Guest 
         res.render("home",{page:"home"})
     }
 
@@ -183,7 +205,8 @@ app.post("/signup",function(req,res){
                                     email: req.body.email,
                                     password: hash,
                                     dia_chi: req.body.address,
-                                    diem: 0
+                                    diem: 0,
+                                    level: 1
                                 })
                                 u.save(function(err){
                                     if(err){
@@ -209,19 +232,19 @@ app.get("/logout",function(req,res){
 })
 
 // home route (Guest view)
-app.use('/',home)
+app.use('/',checkLvUser,home)
 
 // auction route (User view)
-app.use('/auction',handleUserRedirect,auction)
+app.use('/auction',handleUserRedirect,passIdUser,auction)
 
 // admin
 app.use("/admin",handleAdminRedirect,admins)
 
 // User view 
-app.use('/',handleUserRedirect,users)
+app.use('/',handleUserRedirect,passIdUser,users)
 
 // product route (seller view)
-app.use('/product',handleLevelUser,products)
+app.use('/product',handleUserRedirect,handleLevelUser,passIdUser,products)
 
 
 

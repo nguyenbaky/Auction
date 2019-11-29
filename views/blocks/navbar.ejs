@@ -28,29 +28,29 @@
         <!-- bidder -->
         <% if(typeof user != "undefined") { %>
             <li class="nav-item active">
-                <a class="nav-link" href="/profile">Thông tin<span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="/profile/<%- _id %>">Thông tin<span class="sr-only">(current)</span></a>
             </li>
   
             <li class="nav-item active">
-                <a class="nav-link" href="/auction">Sản phẩm đang đấu giá<span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="/auction/<%- _id %>">Sản phẩm đang đấu giá<span class="sr-only">(current)</span></a>
             </li>
             
             <li class="nav-item active">
-                <a class="nav-link" href="/auction/success">Đấu giá thành công<span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="/auction/success/<%- _id %>">Đấu giá thành công<span class="sr-only">(current)</span></a>
             </li>
 
             <li class="nav-item active">
-                <a class="nav-link" href="/favorite">Yêu thích<span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="/favorite/<%- _id %>">Yêu thích<span class="sr-only">(current)</span></a>
             </li>
         <% } %>
 
         <!-- seller -->
         <% if(typeof seller != "undefined") { %>
             <li class="nav-item active">
-                <a class="nav-link" href="/product">Sản phẩm đang bán<span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="/product/<%- _id %>">Sản phẩm đang bán<span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item active">
-                <a class="nav-link" href="/product/sold">Sản phẩm đã bán<span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="/product/sold/<%- _id %>">Sản phẩm đã bán<span class="sr-only">(current)</span></a>
             </li>
         <% } %>
         

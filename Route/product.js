@@ -3,16 +3,16 @@ var router = express.Router()
 
 // Hiện thông tin sản phẩm đang bán
 router.get("/:sellerID",function(req,res){
-    res.render("home",{page:"product",seller:true});
+    res.render("home",{page:"product",user:true,seller:true,_id:res.locals.userID});
 })
 // Hiện thông tin sản phẩm đã bán
 router.get("/sold/:sellerID",function(req,res){
-    res.render("home",{page:"sold_product",seller:true});
+    res.render("home",{page:"sold_product",user:true,seller:true,_id:res.locals.userID});
 })
 
 // Thêm sản phẩm bán
 router.get("/add/:sellerID",function(req,res){
-    res.render("pages/add_product",{page:"add_product",seller:true});
+    res.render("pages/add_product",{page:"add_product",user:true,seller:true,_id:res.locals.userID});
 })
 
 module.exports = router
