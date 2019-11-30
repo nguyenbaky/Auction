@@ -23,48 +23,17 @@
                 <th>Actions</th>
             </tr>
         </thead>
-        <tbody>
-            <tr>
-                <td>1</td>
-                <td class="editRow">Books</td>
-                <td>
-                    <a href="#" class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
-                    <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
-                </td>
-            </tr>
-            <tr>
-                <td>2</td>
-                <td class="editRow">Mobiles</td>
-                <td>
-                    <a href="#" class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
-                    <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
-                </td>
-            </tr>
-            <tr>
-                <td>3</td>
-                <td class="editRow">Laptop</td>
-                <td>
-                    <a href="#" class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
-                    <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
-                </td>
-            </tr>
-            <tr>
-                <td>4</td>
-                <td class="editRow">Clothes</td>
-                <td>
-                    <a href="#" class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
-                    <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
-                </td>
-            </tr>
-            <tr>
-                <td>5</td>
-                <td class="editRow">food</td>
-                <td>
-                    <a href="#" class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
-                    <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
-                </td>
-            </tr>        
-
+        <tbody>           
+            <% cates.forEach(function(cate,index){ %>
+                <tr>
+                    <td><%- index + 1 %></td>
+                    <td class="editRow">  <%- cate.name  %> </td>
+                    <td>
+                        <a href="#" class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
+                        <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
+                    </td>
+                </tr>
+            <% })  %>
         </tbody>
     </table>
     <button type="button" class="btn btn-primary save save_catergary" >Save</button>

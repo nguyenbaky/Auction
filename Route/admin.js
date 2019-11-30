@@ -7,10 +7,29 @@ router.get("/",function(req,res){
 })
 
 router.get("/category",async function(req,res){
-    let cate = await Cate.find({},function(err,cate){
-        res.json(cate)
+    let cate = await Cate.find({},function(err,cates){
+        res.render("admin",{page:"Category",cates});
+    })    
+})
+
+router.post("/category",async function(req,res){
+    var {name} = req.body;
+    var c = new Cate({
+        name
     })
-    // res.render("admin",{page:"Category"});
+    c.save(function(err,c){
+        if(err){
+            res.render("admin",{page:"Category",cates,err});
+        }
+        else{
+            console.log("insert success");
+        }
+    })
+
+    let cate = await Cate.find({},function(err,cates){
+        console.log("aa");
+        res.send("Thêm thành công");
+    })    
 })
 
 router.get("/category/:category",function(req,res){

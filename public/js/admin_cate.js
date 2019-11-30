@@ -18,7 +18,7 @@ $(document).ready(function(){
             }
         });
     });
-    
+
     $(document).on('click', '.edit', function(e) {
         e.preventDefault();
         if(is_edit != 0) {
@@ -41,6 +41,7 @@ $(document).ready(function(){
             return false;
         }      
     });
+
     $(".accept").click(function(e){
         e.preventDefault();
         if(confirm("Accept request?")){
@@ -67,6 +68,21 @@ $(document).ready(function(){
             $("#myTable").find(".edited").find(".editRow").attr('contenteditable','false');
             $("#myTable").find(".edited").find('[name="level"]').attr('disabled','disabled');
         }
+    })
+
+    $(".save_catergary").click(function(e){
+        var data = {}
+        data.name = $("table tbody").find("tr").last().find(".editRow").text();
+        $.ajax({
+            type: 'POST',
+            data: JSON.stringify(data),
+            contentType: 'application/json',
+            url: '/admin/category',						
+            success: function(data) {
+                console.log('success');
+                alert(data);
+            }
+        });
     })
 
     $(".add_user").click(function(e){

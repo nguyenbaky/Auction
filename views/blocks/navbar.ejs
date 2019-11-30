@@ -42,23 +42,25 @@
             <li class="nav-item active">
                 <a class="nav-link" href="/favorite/<%- _id %>">Yêu thích<span class="sr-only">(current)</span></a>
             </li>
-        <% } %>
-
-        <!-- seller -->
-        <% if(typeof seller != "undefined") { %>
-            <li class="nav-item active">
-                <a class="nav-link" href="/product/<%- _id %>">Sản phẩm đang bán<span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item active">
-                <a class="nav-link" href="/product/sold/<%- _id %>">Sản phẩm đã bán<span class="sr-only">(current)</span></a>
-            </li>
-        <% } %>
-        
+             <!-- seller -->
+            <% if(typeof seller != "undefined") { %>
+                <li class="nav-item active">
+                    <a class="nav-link" href="/product/<%- _id %>">Sản phẩm đang bán<span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="/product/sold/<%- _id %>">Sản phẩm đã bán<span class="sr-only">(current)</span></a>
+                </li>
+            <% }else{ %>
+                <button type="button" id="upgrade" class="btn btn-success">Nâng cấp</button>
+            <% } %>
+        <% } %> 
         </ul>
+
         <form class="form-inline my-2 my-lg-0">
         <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        <button class="btn btn-outline-success my-2 my-sm-0 float-right" type="submit">Search</button>
         </form>
+
         <% if(typeof user === "undefined") { %>
             <a class="nav-link" href="/login">Sign in</a>
             <a class="nav-link" href="/signup">Sign up</a>
