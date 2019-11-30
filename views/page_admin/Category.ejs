@@ -19,7 +19,8 @@
         <thead>
             <tr>
                 <th>Number</th>
-                <th style="width: 5%;">Category</th>                        
+                <th style="width: 15%;">Id </th>
+                <th style="width: 15%;">Category</th>                        
                 <th>Actions</th>
             </tr>
         </thead>
@@ -27,7 +28,8 @@
             <% cates.forEach(function(cate,index){ %>
                 <tr>
                     <td><%- index + 1 %></td>
-                    <td class="editRow">  <%- cate.name  %> </td>
+                    <td class="id"><%- cate._id  %></td>
+                    <td class="editRow"><%- cate.name  %></td>
                     <td>
                         <a href="#" class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
                         <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>

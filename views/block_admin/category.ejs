@@ -1,5 +1,5 @@
-<% for(var i=0;i < 3;i++) {%>
+<% cates.forEach(function(cate,index){%>
     <li>       
-        <a href="/admin/category/Books" style="padding-left: 20px;"><i class="fa fa-circle"></i>Books</a>
+        <a href="/admin/category/<%- cate.name  %>" style="padding-left: 20px;"><i class="fa fa-circle"></i><%- cate.name %></a>
     </li>
-<% } %>
+<% }) %>
