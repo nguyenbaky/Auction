@@ -40,12 +40,45 @@ $(document).ready(function(){
 
     $(document).on('click', '.delete', function(e) {
         e.preventDefault();
-        if(confirm("Are you sure you want to delete this?")){
-            $(this).closest("tr").remove();
+        if(is_edit !== 0){
+            //// Kiem tra đang xóa cái đang edit hoac add hay không 
+            if(!$(this).closest("tr").hasClass("edited")){
+                alert("Edit trước khi xóa !!!");
+                return;
+            }
         }
+        // Xoa cái đang add (khong can sua trong db)
+        if($(this).closest("tr").find(".id").text() === ""){
+            if(confirm("Bạn có chắc muốn xóa? ")){
+                $(this).closest("tr").remove();
+            }
+            else{
+                return false;
+            }
+        } // Xoa thay doi trong db 
         else{
-            return false;
-        }      
+            if(confirm("Bạn có chắc muốn xóa? ")){
+                var data = {}
+                data.id = $(this).closest("tr").find(".id").text();
+                $.ajax({
+                    type: 'DELETE',
+                    data: JSON.stringify(data),
+                    contentType: 'application/json',
+                    url: '/admin/category',						
+                    success: function(data) {
+                        alert(data);                                
+                    }
+                });
+
+                $(this).closest("tr").remove();
+            }
+            else{
+                return false;
+            }  
+        }
+            
+        is_add = 0;
+        is_edit = 0;
     });
 
     $(".accept").click(function(e){
@@ -80,11 +113,23 @@ $(document).ready(function(){
     })
 
     $(".save_catergary").click(function(e){
-        if(is_add !== 0){    
-            console.log(is_add);   
+        if(is_add === 0 && is_edit === 0) return;
+        // Kiểm tra chưa nhập thông tin 
+        if(is_add !== 0) {
+            $("#myTable").find("tr").last().find("td").attr('contenteditable','false');
+            $("#myTable").find("tr").last().find('[name="level"]').attr('disabled','disabled');
+        }
+        if(is_edit !== 0) {
+            $("#myTable").find(".edited").find(".editRow").attr('contenteditable','false');
+            $("#myTable").find(".edited").find('[name="level"]').attr('disabled','disabled');
+        }
+        /////////////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////// ADD ///////////////////////////////
+        if(is_add !== 0){     
             var data = {}
             data.name = $("table tbody").find("tr").last().find(".editRow").text();
             if(data.name === "") {
+                alert("Nhập đủ thông tin !!!");
                 return;
             }
             is_add = 0; 
@@ -94,12 +139,19 @@ $(document).ready(function(){
                 contentType: 'application/json',
                 url: '/admin/category',						
                 success: function(data) {
-                    console.log('success');
-                    alert(data);
+                    alert(data);             
+                    if(data === "Category đã tồn tại !!!"){
+                        is_edit = 1;
+                        $("#myTable").find("tr").last().addClass("edited");
+                        $("#myTable").find("tr").last().find(".editRow").text("");
+                        $("#myTable").find("tr").last().find(".editRow").attr('contenteditable','true');
+                        $("#myTable").find("tr").last().find(".editRow").first().focus();
+                    }                    
                 }
             });
         }
 
+        ///////////////////////////////////////// EDIT ///////////////////////////////
         if(is_edit !== 0){
             is_edit = 0;
             console.log($("#myTable").find(".edited").find(".id").text());
@@ -112,11 +164,19 @@ $(document).ready(function(){
                 contentType: 'application/json',
                 url: '/admin/category',						
                 success: function(data) {
-                    console.log('success');
                     alert(data);
+                    if(data === "Category đã tồn tại !!!"){
+                        is_edit = 1;
+                        $("#myTable").find(".edited").find(".editRow").attr('contenteditable','true');
+                        $("#myTable").find(".edited").find(".editRow").first().focus();
+                    }
+                    if(data === "Sửa thành công"){
+                        $("#myTable").find(".edited").removeClass("edited");
+                    }
                 }
             });
         }
+
        
     })
 
