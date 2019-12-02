@@ -149,6 +149,7 @@ router.get("/product/:category_id",async function(req,res){
                 Cate.find({},function(err,cates){
                     return res.render("admin",{page:"Product",products,cates,name})
                 })
+                res.json("1")
             })
 
         }else{
