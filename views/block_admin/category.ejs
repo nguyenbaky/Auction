@@ -1,5 +1,5 @@
 <% cates.forEach(function(cate,index){%>
-    <li>       
-        <a href="/admin/category/<%- cate.name  %>" style="padding-left: 20px;"><i class="fa fa-circle"></i><%- cate.name %></a>
+    <li>    
+        <a name="cate" href="/admin/category/<%-cate._id%>" style="padding-left: 20px;"><i class="fa fa-circle"></i><%- cate.name %></a>
     </li>
 <% }) %>

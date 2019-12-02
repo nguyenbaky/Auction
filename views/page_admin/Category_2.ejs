@@ -3,7 +3,7 @@
     <div class="table-title">
         <div class="row">
             <div class="col-sm-6">
-                <h2>Category <b>Details</b></h2>
+                <h2><%- name %> <b>Product</b></h2>
             </div>
             <div class="col-sm-6">
                 <div class="search-box">
@@ -18,53 +18,24 @@
     <table id="myTable" class="table table-striped">
         <thead>
             <tr>
-                <th>Number</th>
-                <th style="width: 5%;">Name</th>                        
-                <th>Actions</th>
+                    <th>Number</th>
+                    <th style="width: 15%;">Id</th>
+                    <th style="width: 15%;">Category</th>                        
+                    <th>Actions</th>
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>1</td>
-                <td class="editRow">Sách IT</td>
-                <td>
-                    <a href="#" class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
-                    <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
-                </td>
-            </tr>
-            <tr>
-                <td>2</td>
-                <td class="editRow">C++ programming</td>
-                <td>
-                    <a href="#" class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
-                    <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
-                </td>
-            </tr>
-            <tr>
-                <td>3</td>
-                <td class="editRow">Python programming</td>
-                <td>
-                    <a href="#" class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
-                    <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
-                </td>
-            </tr>
-            <tr>
-                <td>4</td>
-                <td class="editRow">NodeJS programming</td>
-                <td>
-                    <a href="#" class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
-                    <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
-                </td>
-            </tr>
-            <tr>
-                <td>5</td>
-                <td class="editRow">Java programming</td>
-                <td>
-                    <a href="#" class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
-                    <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
-                </td>
-            </tr>        
-
+            <% categories.forEach(function(category,index){ %>
+                <tr>
+                    <td><%- index +1 %></td>
+                    <td class="id"><%- category._id  %></td>
+                    <td name="name" class="editRow"><a href="/admin/product/<%- category._id %>"><%- category.name %></a></td>
+                    <td>
+                        <a href="#" class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
+                        <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
+                    </td>
+                    </tr>
+            <% }) %>    
         </tbody>
     </table>
     <button type="button" class="btn btn-primary save save_catergory_2" >Save</button>

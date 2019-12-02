@@ -1,0 +1,49 @@
+
+<div class="table-wrapper">			
+        <div class="table-title">
+            <div class="row">
+                <div class="col-sm-6">
+                    <h2><%- name %> <b>Product</b></h2>
+                </div>
+                <div class="col-sm-6">
+                    <div class="search-box">
+                        <div class="input-group">								
+                            <input type="text" id="search" class="form-control" placeholder="Search by Name">
+                            <span class="input-group-addon"><i class="material-icons">&#xE8B6;</i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <table id="myTable" class="table table-striped">
+            <thead>
+                <tr>
+                    <th style="width: 10%;">Number</th>
+                    <th style="width: 20%;">Name</th> 
+                    <th style="width: 10%;">Price_start</th>      
+                    <th style="width: 10%;">Price_step</th>   
+                    <th style="width: 20%;">Date_start</th>  
+                    <th style="width: 20%;">Date_end</th>             
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% products.forEach(function(product,index){ %>
+                    <tr>
+                        <td><%- index + 1 %></td>
+                        <td name="name" class="editRow"><%- product.name %></td>
+                        <td class="editRow"><%- product.Gia_Khoi_Diem %></td>
+                        <td class="editRow"><%- product.Buoc_gia %></td>
+                        <td class="editRow"><%- product.date_begin %></td>
+                        <td class="editRow"><%- product.date_end %></td>
+                        <td>
+                            <a href="#" class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
+                            <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
+                        </td>
+                    </tr>
+                <% }) %> 
+            </tbody>
+        </table>
+        <button type="button" class="btn btn-primary save save_catergory_2" >Save</button>
+    </div>
+        

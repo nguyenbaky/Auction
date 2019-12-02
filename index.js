@@ -36,6 +36,7 @@ const User = require("./models/User");
 const Product = require("./models/product");
 const cate = require("./models/cate");
 const admin = require("./models/admin");
+const Category = require("./models/category")
 
 // bcrypt
 const bcrypt = require('bcrypt');
@@ -99,30 +100,30 @@ function checkLvUser(req,res,next){
 }
 
 app.get("/",function(req,res){ 
-    if(typeof req.session.token != "undefined"){     
-        jwt.verify(req.session.token,secret,function(err,decoded){
-            if(decoded.level > 1){
-                // Seller
-                res.render("home",{page:"home",user:true,seller:true,_id:decoded._id})
-            }else{
-                // Bidder
-                res.render("home",{page:"home",user:true,_id:decoded._id})
-            }
-        })  
-    }
-    else{
-        // Guest 
-        res.render("home",{page:"home"})
-    }
+    // if(typeof req.session.token != "undefined"){     
+    //     jwt.verify(req.session.token,secret,function(err,decoded){
+    //         if(decoded.level > 1){
+    //             // Seller
+    //             res.render("home",{page:"home",user:true,seller:true,_id:decoded._id})
+    //         }else{
+    //             // Bidder
+    //             res.render("home",{page:"home",user:true,_id:decoded._id})
+    //         }
+    //     })  
+    // }
+    // else{
+    //     // Guest 
+    //     res.render("home",{page:"home"})
+    // }
 
 
-    // var c = new Cate({
-    //     name : "Books"
-    // })
-    // c.save(function(err,c){
-    //     if(err){res.json(err)}
-    //     else res.json("success")
-    // })
+    var c = new Category({
+        name : "Java for beginer"
+    })
+    c.save(function(err,c){
+        if(err){res.json(err)}
+        else res.json("success")
+    })
 })
 
 // login

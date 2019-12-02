@@ -239,4 +239,7 @@ $(document).ready(function(){
 
     })
 
+    $("[name='category']").click(function(e){
+        e.preventDefault();
+    })
 });
