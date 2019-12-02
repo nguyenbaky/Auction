@@ -1,6 +1,7 @@
 var express = require('express')
 var router = express.Router()
 const Cate = require("../models/cate");
+const User = require("../models/User")
 
 router.get("/",async function(req,res){   
     let cate = await Cate.find({},function(err,cates){
@@ -59,7 +60,7 @@ router.put("/category",async function (req,res) {
 router.delete("/category",async function(req,res) {
     var {id} = req.body;
     await Cate.findOne({_id:id},function (err,cate) {
-        if(cate.CategoryID.toString() === ""){
+        if(cate.categoryID.toString() === ""){
             cate.delete(function (err,c) {
                 if(!err){
                     return res.send("Xóa thành công");
@@ -87,9 +88,37 @@ router.get("/category/:category",async function(req,res){
 })
 
 router.get("/users",async function(req,res){
-    let cate = await Cate.find({},async function(err,cates){
-        res.render("admin",{page:"User",cates});
-    }) 
+    let cate = await Cate.find({},function (err,cates) {
+        let users = User.find({},function (err,users) {
+            res.render("admin",{page:"User",cates,users});
+        })
+    })  
+})
+///// update level user
+router.put("/users",async function(req,res){
+    var {email,level} = req.body
+    console.log(email)
+    await User.findOneAndUpdate({email},{level},function(err,u){
+        if(!err){
+            return res.send("Sửa thành công !!!")
+        }else{
+            return res.send(err)
+        }
+    })
+
+})
+
+//// delete user
+router.delete("/users",async function(req,res){
+    var {email} = req.body
+    await User.findOneAndDelete({email},function(err,u){
+        if(err){
+            return res.send(err)
+        }else{
+            return res.send("Xóa thành công")
+        }
+    })
+
 })
 
 router.get("/request",async function(req,res){

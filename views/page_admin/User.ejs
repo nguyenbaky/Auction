@@ -18,91 +18,42 @@
     <table id="myTable" class="table table-striped">
         <thead>
             <tr>
-                <th>#</th>
-                <th style="width: 22%;">User</th>   
-                <th >Level</th>  
-                <th>Email</th>                   
+                <th style="width: 15%;">Number</th>
+                <th style="width: 25%;">User</th>  
+                <th style="width: 25%;">Email</th> 
+                <th style="width: 15%;">Level</th>                    
                 <th>Actions</th>               
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>1</td>
-                <td class="editRow">aaa</td>
-                <td>
-                    <select name="level" disabled>
-                        <option value="Bidder">Bidder</option>
-                        <option value="Seller">Seller</option>
-                    </select>
-                </td>
-                <td class="editRow">a@gmail.com</td>
-                <td>
-                    <a href="#" class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
-                    <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
-                </td>
-            </tr>
-            <tr>
-                <td>2</td>
-                <td class="editRow">bbb</td>
-                <td>
-                    <select name="level" disabled>
-                        <option value="Seller">Seller</option>
-                        <option value="Bidder">Bidder</option>
-                    </select>
-                </td>
-                <td class="editRow">b@gmail.com</td>
-                <td>
-                    <a href="#" class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
-                    <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
-                </td>
-            </tr>
-            <tr>
-                <td>3</td>
-                <td class="editRow">ccc</td>
-                <td>
-                    <select name="level" disabled>
-                        <option value="Seller">Seller</option>
-                        <option value="Bidder">Bidder</option>
-                    </select>
-                </td>
-                <td class="editRow">c@gmail.com</td>
-                <td>
-                    <a href="#" class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
-                    <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
-                </td>
-            </tr>
-            <tr>
-                <td>4</td>
-                <td class="editRow">ddd</td>
-                <td>
-                    <select name="level" disabled>
-                        <option value="Bidder">Bidder</option>
-                        <option value="Seller">Seller</option>                      
-                    </select>
-                </td>
-                <td class="editRow">d@gmail.com</td>
-                <td>
-                    <a href="#" class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
-                    <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
-                </td>
-            </tr>
-            <tr>
-                <td>5</td>
-                <td class="editRow">eee</td>
-                <td>
-                    <select name="level" disabled>
-                        <option value="Bidder">Bidder</option>
-                        <option value="Seller">Seller</option>                       
-                    </select>
-                </td>
-                <td class="editRow">e@gmail.com</td>
-                <td>
-                    <a href="#" class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
-                    <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
-                </td>
-            </tr>        
+            <% users.forEach(function(user,index){ %>
+                <tr>
+                    <td><%- index + 1 %></td>
+                    <td name="name"><%- user.username  %></td>
+                    <td name="email"><%- user.email %></td>
+                    <% if(user.level === 1){ %>
+                        <td>
+                            <select name="level" disabled>
+                                <option value="Bidder">Bidder</option>
+                                <option value="Seller">Seller</option>                       
+                            </select>
+                        </td>
+                    <%    }else{ %>
+                        <td>
+                            <select name="level" disabled>
+                                <option value="Seller">Seller</option>
+                                <option value="Bidder">Bidder</option>                       
+                            </select>
+                        </td>
+                    <%  }  %>                
+                    <td>
+                        <a href="#" class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
+                        <a href="#" class="delete delete_user" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
+                    </td>
+                </tr>  
+            <% }) %>
+
         </tbody>
     </table>
     <button type="button" class="btn btn-primary save save_user" >Save</button>
-    <button type="button" class="btn btn-primary add_user" >Add</button>
 </div>

@@ -3,11 +3,10 @@ $(document).ready(function(){
     var is_add = 0;
 	// Activate tooltips
     $('[data-toggle="tooltip"]').tooltip();
-    
 	// Filter table rows based on searched term
     $("#search").on("keyup", function() {
         var term = $(this).val().toLowerCase();
-        $("table tbody tr").each(function(){
+        $("#myTable tr").each(function(){
             $row = $(this);
             var name = $row.find("td:nth-child(2)").text().toLowerCase();
             console.log(name);
@@ -38,8 +37,10 @@ $(document).ready(function(){
         $(this).closest("tr").find(".editRow").first().focus();        
     });
 
-    $(document).on('click', '.delete', function(e) {
+    $(document).on('click', '.delete_category', function(e) {
         e.preventDefault();
+        console.log(is_edit)
+        console.log(is_add)
         if(is_edit !== 0){
             //// Kiem tra đang xóa cái đang edit hoac add hay không 
             if(!$(this).closest("tr").hasClass("edited")){
@@ -76,10 +77,28 @@ $(document).ready(function(){
                 return false;
             }  
         }
-            
-        is_add = 0;
         is_edit = 0;
     });
+
+    $(document).on('click', '.delete_user', function(e){
+        e.preventDefault();
+        if(confirm("Bạn có chắc muốn xóa? ")){
+            var data = {}
+            data.email = $(this).closest("tr").find('[name="email"]').text();
+            $.ajax({
+                type: 'DELETE',
+                data: JSON.stringify(data),
+                contentType: 'application/json',
+                url: '/admin/users',						
+                success: function(data) {
+                    alert(data);                                
+                }
+            });
+            $(this).closest("tr").remove();
+        }
+        
+    });
+
 
     $(".accept").click(function(e){
         e.preventDefault();
@@ -96,40 +115,34 @@ $(document).ready(function(){
     })
 
     $(".save").click(function(e){
+        console.log(is_add)
         if(is_add === 0 && is_edit === 0) return;
+        
         // Kiểm tra chưa nhập thông tin 
-        if($("table tbody").find("tr").last().find(".editRow").text() === "") {
-            alert("Nhập đủ thông tin !!!");
-            return;
-        }
         if(is_add !== 0) {
             $("#myTable").find("tr").last().find("td").attr('contenteditable','false');
             $("#myTable").find("tr").last().find('[name="level"]').attr('disabled','disabled');
         }
+
         if(is_edit !== 0) {
+            if($("#myTable").find(".edited").find('[name="name"]').text() === "") {
+                alert("Nhập đủ thông tin !!!");
+                return;
+            }
             $("#myTable").find(".edited").find(".editRow").attr('contenteditable','false');
             $("#myTable").find(".edited").find('[name="level"]').attr('disabled','disabled');
         }
     })
 
     $(".save_catergary").click(function(e){
-        if(is_add === 0 && is_edit === 0) return;
-        // Kiểm tra chưa nhập thông tin 
-        if(is_add !== 0) {
-            $("#myTable").find("tr").last().find("td").attr('contenteditable','false');
-            $("#myTable").find("tr").last().find('[name="level"]').attr('disabled','disabled');
-        }
-        if(is_edit !== 0) {
-            $("#myTable").find(".edited").find(".editRow").attr('contenteditable','false');
-            $("#myTable").find(".edited").find('[name="level"]').attr('disabled','disabled');
-        }
-        /////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////// ADD ///////////////////////////////
+        ///////////////////////////////////////// ADD ///////////////////////////////////
         if(is_add !== 0){     
             var data = {}
-            data.name = $("table tbody").find("tr").last().find(".editRow").text();
+            data.name = $("#myTable").find("tr").last().find(".editRow").text();
             if(data.name === "") {
                 alert("Nhập đủ thông tin !!!");
+                $("#myTable").find("tr").last().find(".editRow").attr('contenteditable','true');
+                $("#myTable").find("tr").last().find(".editRow").focus();
                 return;
             }
             is_add = 0; 
@@ -143,15 +156,15 @@ $(document).ready(function(){
                     if(data === "Category đã tồn tại !!!"){
                         is_edit = 1;
                         $("#myTable").find("tr").last().addClass("edited");
-                        $("#myTable").find("tr").last().find(".editRow").text("");
                         $("#myTable").find("tr").last().find(".editRow").attr('contenteditable','true');
                         $("#myTable").find("tr").last().find(".editRow").first().focus();
-                    }                    
+                    }    
+                    location.reload();                
                 }
             });
         }
 
-        ///////////////////////////////////////// EDIT ///////////////////////////////
+        ///////////////////////////////////////// EDIT //////////////////////////////////
         if(is_edit !== 0){
             is_edit = 0;
             console.log($("#myTable").find(".edited").find(".id").text());
@@ -173,6 +186,7 @@ $(document).ready(function(){
                     if(data === "Sửa thành công"){
                         $("#myTable").find(".edited").removeClass("edited");
                     }
+                    location.reload();  
                 }
             });
         }
@@ -180,29 +194,29 @@ $(document).ready(function(){
        
     })
 
-    $(".add_user").click(function(e){
-        if(is_add != 0) return;
-        is_add += 1;
-        $("table tbody").append("<tr>");
-        $("table tbody").find("tr").last().append('<td>'+ rows+'</td>');
-            $("table tbody").find("tr").last().append('<td contenteditable="true" class="editRow"></td>');
-            $("table tbody").find("tr").last().append('<td>'+
-            '<select name="level" disabled>'+
-                '<option value="Bidder">Bidder</option>'+
-                '<option value="Seller">Seller</option>'+                       
-            '</select>'+
-        '</td>');
-        $("table tbody").find("tr").last().append('<td contenteditable="true" class="editRow"></td>');
-        $("table tbody").find("tr").last().append('<td>'+
-        '<a href="#" class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>'+
-        '<a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>'+
-        '</td>');
-        $("table tbody").find("tr").last().append("</tr>");
-        $("table tbody").find("tr").last().find(".editRow").first().focus();
+    $(".save_user").click(function (e) {
+        if(is_edit !== 0){
+            is_edit = 0
+            var data = {}
+            level = $("#myTable").find(".edited").find('[name="level"] option:selected').text();
+            data.email = $("#myTable").find(".edited").find('[name="email"]' ).text();
+            if(level === "Bidder") data.level = 1;
+            else data.level = 2;
+            $.ajax({
+                type: 'PUT',
+                data: JSON.stringify(data),
+                contentType: 'application/json',
+                url: '/admin/users',						
+                success: function(data) {
+                    alert(data);             
+                    location.reload();                
+                }
+            });
+            $("#myTable").find("tr").last().find('[name="level"]').attr("disabled","disabled");
+        }
     })
-
+    /// thêm category
     $(".add").click(function(e){
-        console.log(is_add)
         if(is_add !== 0){
             alert("Save trước khi thêm !!!");
             return;
@@ -213,16 +227,17 @@ $(document).ready(function(){
         }
         is_add += 1;
         var rows = $("#myTable").find("tr").length;
-        $("table tbody").append("<tr>");
-        $("table tbody").find("tr").last().append('<td>'+ rows+'</td>');
-        $("table tbody").find("tr").last().append('<td></td>');
-        $("table tbody").find("tr").last().append('<td contenteditable="true" class="editRow" tabindex="1"></td>');
-        $("table tbody").find("tr").last().append('<td>'+
+        $("#myTable").append("<tr>");
+        $("#myTable").find("tr").last().append('<td>'+ rows+'</td>');
+        $("#myTable").find("tr").last().append('<td></td>');
+        $("#myTable").find("tr").last().append('<td name="name" contenteditable="true" class="editRow" tabindex="1"></td>');
+        $("#myTable").find("tr").last().append('<td>'+
         '<a href="#" class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>'+
-        '<a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>'+
+        '<a href="#" class="delete delete_category" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>'+
         '</td>');
-        $("table tbody").find("tr").last().append("</tr>");
-        $("table tbody").find("tr").last().find(".editRow").focus();
+        $("#myTable").find("tr").last().append("</tr>");
+        $("#myTable").find("tr").last().find(".editRow").focus();
 
     })
+
 });
