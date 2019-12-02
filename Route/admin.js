@@ -97,8 +97,7 @@ router.get("/users",async function(req,res){
 ///// update level user
 router.put("/users",async function(req,res){
     var {email,level} = req.body
-    console.log(email)
-    await User.findOneAndUpdate({email},{level},function(err,u){
+    await User.findOneAndUpdate({email},{level,is_update:0},function(err,u){
         if(!err){
             return res.send("Sửa thành công !!!")
         }else{

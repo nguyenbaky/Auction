@@ -99,7 +99,6 @@ $(document).ready(function(){
         
     });
 
-
     $(".accept").click(function(e){
         e.preventDefault();
         if(confirm("Accept request?")){

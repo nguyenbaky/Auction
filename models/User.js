@@ -4,7 +4,7 @@ const userSchema = new mongoose.Schema({
     username:String,    
     email: String,
     ho_ten: String,
-    is_update: Boolean,
+    is_update: Number,
     dia_chi: String,
     password: String,
     sp_Dang_Dau_Gia:[{type:mongoose.Schema.Types.ObjectId}],

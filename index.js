@@ -207,7 +207,8 @@ app.post("/signup",function(req,res){
                                     password: hash,
                                     dia_chi: req.body.address,
                                     diem: 0,
-                                    level: 1
+                                    level: 1,
+                                    is_update: 0 
                                 })
                                 u.save(function(err){
                                     if(err){
