@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <base href="http://localhost:8000/">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>    
@@ -11,20 +12,22 @@
     <link href="css/app.css" rel="stylesheet" />
     <link href="css/add_product.css" rel="stylesheet" />
 
+    <link rel="stylesheet prefetch" href="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker.css">
     <script src="https://cdn.ckeditor.com/ckeditor5/15.0.0/classic/ckeditor.js"></script>
 
 </head>
 <body>
     <div style="padding: 40px;">
     <form class="needs-validation" novalidate action="" method="POST">
-        <div class="form-group">
+        <!-- Name  -->
+        <div class="form-row">
             <label for="inputSuccess1">Tên sản phẩm</label>
             <input id="inputSuccess1" class="form-control" type="text" required>
             <div class="invalid-feedback">
                 Nhập tên sản phẩm !!!
             </div>
         </div>
-
+        <!-- Price  -->
         <div class="form-row">
             <div class="col-md-6 mb-3" style="padding: 0!important;padding-right: 5px!important;">
                 <label for="validationCustom03">Giá khởi điểm</label>
@@ -41,8 +44,8 @@
                 </div>
             </div>
         </div>
-
-        <div class="form-group">
+        <!-- Category -->
+        <div class="form-row">
             <label for="exampleFormControlSelect1">Danh mục</label>
             <select class="form-control" id="exampleFormControlSelect1">
                 <option>Books</option>
@@ -51,6 +54,45 @@
                 <option>Clothes</option>
                 <option>Food</option>
             </select>
+        </div>
+        <!-- Time -->
+        <div class="form-row">
+            <label for="exampleFormControlSelect1">Chọn ngày kết thúc: </label>
+            <div id="datepicker" class="input-group date" data-date-format="dd-mm-yyyy"> 
+                <input class="form-control" readonly="" type="text"> <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span> 
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="col-md-6 mb-3" style="padding: 0!important;padding-right: 5px!important;">
+                <label for="exampleFormControlSelect1">Thời gian kết thúc (giờ)</label>
+                <select class="form-control" id="hour">
+                  <% for(var i = 0;i < 24;i++) {%>
+                        <% if(i < 10){ %>
+                            <option><%- "0" + i %></option>
+                        <%}else{ %>
+                            <option><%- i %></option>
+                        <% } %>
+                    <% } %>
+                </select>
+            </div>
+            <div class="col-md-6 mb-3" style="padding: 0!important;padding-right: 5px!important;">
+                <label for="exampleFormControlSelect1">Thời gian kết thúc (phút)</label>
+                    <select class="form-control" id="hour">
+                    <% for(var i = 0;i < 60;i+=5) {%>
+                            <% if(i < 10){ %>
+                                <option><%- "0" + i %></option>
+                            <%}else{ %>
+                                <option><%- i %></option>
+                            <% } %>
+                        <% } %>
+                    </select>
+            </div>
+        </div>
+
+        <div class="custom-control custom-checkbox mr-sm-2" >
+            <input type="checkbox" class="custom-control-input" id="customControlAutosizing">
+            <label class="custom-control-label" for="customControlAutosizing">Tự động gia hạn</label>
         </div>
 
         <div class="form-group">
@@ -61,11 +103,7 @@
             </div>
         </div>
 
-        <div class="col-auto my-1"  style="padding-bottom: 20px;">
-        <div class="custom-control custom-checkbox mr-sm-2" >
-            <input type="checkbox" class="custom-control-input" id="customControlAutosizing">
-            <label class="custom-control-label" for="customControlAutosizing">Tự động gia hạn</label>
-        </div>
+        
 
         <div class="form-row">
             <label class="col-md-2 control-label">
@@ -91,6 +129,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.3.1/js/fileinput.js"></script>
 
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.js"></script>
     <script src="js/add_product.js"></script>
 
 </body>

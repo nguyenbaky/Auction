@@ -1,4 +1,4 @@
-(function() {
+$(document).ready(function(){
     'use strict';
     window.addEventListener('load', function() {
         // Fetch all the forms we want to apply custom Bootstrap validation styles to
@@ -23,4 +23,12 @@
     .catch( error => {
             console.error( error );
     } );
-})();
+
+
+    $("#datepicker").datepicker({         
+        "autoclose": true,         
+        "format":"yyyy-mm-dd"
+    })
+       
+
+})
