@@ -20,10 +20,11 @@
                 <tr>
                     <th style="width: 10%;">Number</th>
                     <th style="width: 20%;">Name</th> 
+                    <th style="width: 20%;">Seller</th>
                     <th style="width: 10%;">Price_start</th>      
                     <th style="width: 10%;">Price_step</th>   
-                    <th style="width: 20%;">Date_start</th>  
-                    <th style="width: 20%;">Date_end</th>             
+                    <th style="width: 10%;">Date_start</th>  
+                    <th style="width: 10%;">Date_end</th>             
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -31,13 +32,13 @@
                 <% products.forEach(function(product,index){ %>
                     <tr>
                         <td><%- index + 1 %></td>
-                        <td name="name" class="editRow"><%- product.name %></td>
-                        <td class="editRow"><%- product.Gia_Khoi_Diem %></td>
-                        <td class="editRow"><%- product.Buoc_gia %></td>
-                        <td class="editRow"><%= product.date_begin %></td>
-                        <td class="editRow"><%- product.date_end %></td>
+                        <td><%- product.name %></td>
+                        <td><%- product.Seller %></td>
+                        <td><%- product.Gia_Khoi_Diem %></td>
+                        <td><%- product.Buoc_gia %></td>
+                        <td><%= product.date_begin %></td>
+                        <td><%- product.date_end %></td>
                         <td>
-                            <a href="#" class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
                             <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
                         </td>
                     </tr>

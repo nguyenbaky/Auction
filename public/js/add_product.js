@@ -29,6 +29,8 @@ $(document).ready(function(){
         "autoclose": true,         
         "format":"yyyy-mm-dd"
     })
-       
+    $("#date").click(function(e){
+        $(this).attr("readonly","true")
+    })
 
 })

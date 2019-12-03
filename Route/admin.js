@@ -60,10 +60,10 @@ router.get("/category",async function(req,res){
     })    
 })
 //// add cateogory 1
-router.post("/category",async function(req,res){
+router.post("/cate",async function(req,res){
     var {name} = req.body;
     var c = new Cate({
-        name
+        name,
     })
     await Cate.findOne({name},function (err,cate) {
         if(cate){
@@ -83,7 +83,7 @@ router.post("/category",async function(req,res){
     })    
 })
 //// update category 1
-router.put("/category",async function (req,res) {
+router.put("/cate",async function (req,res) {
     var {name} = req.body;
     await Cate.findOne({name},function (err,cate) {
         if(cate){
@@ -102,7 +102,7 @@ router.put("/category",async function (req,res) {
     })  
 })
 /// delete category 1
-router.delete("/category",async function(req,res) {
+router.delete("/cate",async function(req,res) {
     var {id} = req.body;
     await Cate.findOne({_id:id},function (err,cate) {
         if(cate.categoryID.toString() === ""){
@@ -112,16 +112,16 @@ router.delete("/category",async function(req,res) {
                 }             
             })
         }else{
-            return res.send("Không thể xóa danh mục đã có thể loại ");
+            return res.send("Không thể xóa danh mục đã có thể loại");
         }
     })
    
 })
 
 /// category 2
-router.get("/category/:category_id",async function(req,res){
-    var {category_id} = req.params // id cate
-    await Cate.findOne({_id:category_id},function(err,cate){
+router.get("/category/:cate_id",async function(req,res){
+    var {cate_id} = req.params // id cate
+    await Cate.findOne({_id:cate_id},function(err,cate){
         if(cate){
             var name = cate.name
             Category.find({
@@ -138,8 +138,80 @@ router.get("/category/:category_id",async function(req,res){
     })   
 })
 
+router.post("/category/:cate_id",async function(req,res){
+    var {name} = req.body
+    var c = new Category({
+        name
+    })
+    await Category.findOne({name},function (err,category) {
+        if(category){
+            return res.send("Category đã tồn tại !!!");
+        }
+        else{
+            c.save(function(err,c){
+                if(err){
+                    return res.send("Không thành công");
+                }
+                else{
+                    var id = req.params.cate_id
+                    Cate.findOneAndUpdate(
+                        {_id:id},
+                        { $push:{categoryID:c._id} },
+                        function(err,cate){
+                            if(!err) console.log("thêm id thanh cong")
+                        })
+                    return res.send("Thêm thành công");  
+                }
+            })
+        }
+    })   
+})
+
+router.put("/category/:cate_id",async function(req,res){
+    var {name} = req.body;
+    await Category.findOne({name},function (err,category) {
+        if(category){
+            return res.send("Category đã tồn tại !!!");
+        }
+        else{
+            Category.findOneAndUpdate({_id:req.body.id},{name},function (err,c) {
+                if(err){
+                    return res.send(500, {error: err});
+                }
+                else{
+                    return res.send("Sửa thành công")
+                }
+            })
+        }
+    })  
+})
+
+router.delete("/category/:cate_id",async function(req,res){
+    var {id} = req.body;
+    var {cate_id} = req.params
+    await Category.findOne({_id:id},function (err,category) {
+        if(category.productID.toString() === ""){
+            category.delete(function (err,cate) {
+                if(!err){
+                    Cate.findOneAndUpdate(
+                        {_id:cate_id},
+                        {$pull: {categoryID: id}},
+                        function(err,c){
+                            if(!err) console.log("xóa id thành công")
+                        }
+                    )
+                    return res.send("Xóa thành công");
+                }             
+            })
+        }else{
+            return res.send("Không thể xóa thể loại đã có sản phẩm");
+        }
+    })
+})
+
 router.get("/product/:category_id",async function(req,res){
     var {category_id} = req.params  // id category
+    
     await Category.findOne({_id:category_id},function(err,category){
         if(category){
             var name = category.name
@@ -149,7 +221,6 @@ router.get("/product/:category_id",async function(req,res){
                 Cate.find({},function(err,cates){
                     return res.render("admin",{page:"Product",products,cates,name})
                 })
-                res.json("1")
             })
 
         }else{

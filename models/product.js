@@ -10,7 +10,8 @@ const productSchema = new mongoose.Schema({
     date_begin: String,
     date_end: String,
     description: String,
-    Seller : String
+    Seller : String,
+    categoryID : mongoose.Schema.ObjectId
 })
 
 module.exports = mongoose.model("Product", productSchema);
