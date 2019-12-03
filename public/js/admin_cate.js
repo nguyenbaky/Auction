@@ -229,7 +229,6 @@ $(document).ready(function(){
         var rows = $("#myTable").find("tr").length;
         $("#myTable").append("<tr>");
         $("#myTable").find("tr").last().append('<td>'+ rows+'</td>');
-        $("#myTable").find("tr").last().append('<td></td>');
         $("#myTable").find("tr").last().append('<td name="name" contenteditable="true" class="editRow" tabindex="1"></td>');
         $("#myTable").find("tr").last().append('<td>'+
         '<a href="#" class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>'+
@@ -344,6 +343,28 @@ $(document).ready(function(){
             }  
         }
         is_edit = 0;
+    });
+
+    $(document).on('click', '.delete_product', function(e) {
+        if(confirm("Bạn có chắc muốn xóa? ")){
+            var url = window.location.pathname
+            var url_slit = url.split("/")
+            var id = url_slit[3]
+            var data={}
+            data.id = $(this).closest('tr').find('.id').text()
+            console.log("/admin/product/"+id)
+            $.ajax({
+                type: 'DELETE',
+                data: JSON.stringify(data),
+                contentType: 'application/json',
+                url: '/admin/product/'+id,						
+                success: function(data) {
+                    alert(data);    
+                    location.reload();                    
+                }
+            });
+        }
+        
     });
 
     $("[name='category']").click(function(e){

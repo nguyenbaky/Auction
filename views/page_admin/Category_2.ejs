@@ -19,7 +19,7 @@
         <thead>
             <tr>
                     <th>Number</th>
-                    <th style="width: 15%;">Id</th>
+                    <th style="display: none;">Id</th>
                     <th style="width: 15%;">Category</th>                        
                     <th>Actions</th>
             </tr>
@@ -28,7 +28,7 @@
             <% categories.forEach(function(category,index){ %>
                 <tr>
                     <td><%- index +1 %></td>
-                    <td class="id"><%- category._id  %></td>
+                    <td style="display: none;" class="id"><%- category._id  %></td>
                     <td name="name" class="editRow"><a href="/admin/product/<%- category._id %>"><%- category.name %></a></td>
                     <td>
                         <a href="#" class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>

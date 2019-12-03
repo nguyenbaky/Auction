@@ -176,7 +176,7 @@ router.put("/category/:cate_id",async function(req,res){
         else{
             Category.findOneAndUpdate({_id:req.body.id},{name},function (err,c) {
                 if(err){
-                    return res.send(500, {error: err});
+                    return res.send(err)
                 }
                 else{
                     return res.send("Sửa thành công")
@@ -209,14 +209,15 @@ router.delete("/category/:cate_id",async function(req,res){
     })
 })
 
+/// product
 router.get("/product/:category_id",async function(req,res){
+    var date = new Date()
     var {category_id} = req.params  // id category
-    
     await Category.findOne({_id:category_id},function(err,category){
         if(category){
             var name = category.name
             Products.find({
-                _id: {$in : category.productID}
+                _id: {$in : category.productID},
             },function(err,products){
                 Cate.find({},function(err,cates){
                     return res.render("admin",{page:"Product",products,cates,name})
@@ -227,7 +228,24 @@ router.get("/product/:category_id",async function(req,res){
             res.status(500).send('Something wrong!')
         }
     })
+    
+
+   
 })
 
-
+router.delete("/product/:category_id",async function(req,res){
+    var {category_id} = req.params
+    var {id} = req.body
+    await Category.findOneAndUpdate(
+            {_id: category_id},
+            { $pull: {productID: id}},
+            function(err,p){
+                if(!err) console.log("Xoa id product khoi category thành công")
+            }
+        )
+    await Products.findOneAndDelete({_id:id},function(err,p){
+        if(!err) return res.send("Xóa thành công")
+        else return res.send(err)
+    })
+})
 module.exports = router

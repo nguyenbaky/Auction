@@ -33,7 +33,7 @@ var users = require('./Route/user')
 var multer  = require('multer');
 const Cate = require("./models/cate");
 const User = require("./models/User");
-const Product = require("./models/product");
+const Products = require("./models/product");
 const cate = require("./models/cate");
 const admin = require("./models/admin");
 const Category = require("./models/category")
@@ -115,14 +115,8 @@ app.get("/",function(req,res){
         // Guest 
         res.render("home",{page:"home"})
     }
-
-    // var c = new Category({
-    //     name : "Java for beginer"
-    // })
-    // c.save(function(err,c){
-    //     if(err){res.json(err)}
-    //     else res.json("success")
-    // })
+   
+    
 })
 
 // login
