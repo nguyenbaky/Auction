@@ -3,9 +3,8 @@ var router = express.Router()
 
 const Cate = require("../models/cate");
 const Category = require("../models/category")
-const User = require("../models/User")
+const Users = require("../models/User")
 const Products = require("../models/product");
-
 
 router.get("/",async function(req,res){   
     let cate = await Cate.find({},function(err,cates){
@@ -15,7 +14,7 @@ router.get("/",async function(req,res){
 
 router.get("/users",async function(req,res){
     let cate = await Cate.find({},function (err,cates) {
-        let users = User.find({},function (err,users) {
+        let users = Users.find({},function (err,users) {
             res.render("admin",{page:"User",cates,users});
         })
     })  
@@ -23,7 +22,7 @@ router.get("/users",async function(req,res){
 ///// update level user
 router.put("/users",async function(req,res){
     var {email,level} = req.body
-    await User.findOneAndUpdate({email},{level,is_update:0},function(err,u){
+    await Users.findOneAndUpdate({email},{level,is_update:0},function(err,u){
         if(!err){
             return res.send("Sửa thành công !!!")
         }else{
@@ -36,7 +35,7 @@ router.put("/users",async function(req,res){
 //// delete user
 router.delete("/users",async function(req,res){
     var {email} = req.body
-    await User.findOneAndDelete({email},function(err,u){
+    await Users.findOneAndDelete({email},function(err,u){
         if(err){
             return res.send(err)
         }else{
@@ -45,12 +44,38 @@ router.delete("/users",async function(req,res){
     })
 
 })
-
+/// Request user
 router.get("/request",async function(req,res){
     let cate = await Cate.find({},async function(err,cates){
-        res.render("admin",{page:"Request",cates});
+        Users.find({is_update:1},function (err,users) {
+            if(users) res.render("admin",{page:"Request",cates,users});
+            else res.render("admin",{page:"Request",cates})
+        })      
     }) 
     
+})
+
+router.post("/request",async function (req,res) {
+    var {username,option} = req.body
+    if(option === 1){
+        await Users.findOneAndUpdate(
+            {username},
+            {is_update:0,level:2},
+            function(err,u){
+                if(!err) return res.send("acept thành công!!!")
+                else return res.send(err)
+            }
+        )
+    }else{
+        await Users.findOneAndUpdate(
+            {username},
+            {is_update:0},
+            function(err,u){
+                if(!err) return res.send("decline thành công!!!")
+                else return res.send(err)
+            }
+        )
+    }
 })
 
 // category 1
@@ -248,4 +273,6 @@ router.delete("/product/:category_id",async function(req,res){
         else return res.send(err)
     })
 })
+
+
 module.exports = router

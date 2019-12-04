@@ -106,6 +106,19 @@ $(document).ready(function(){
     $(".accept").click(function(e){
         e.preventDefault();
         if(confirm("Accept request?")){
+            var data = {}
+            data.username = $(this).closest("tr").find(".editRow").text();
+            data.option = 1
+            $.ajax({
+                type: 'POST',
+                data: JSON.stringify(data),
+                contentType: 'application/json',
+                url: '/admin/Request',						
+                success: function(data) {
+                    console.log(data)              
+                    location.reload();                
+                }
+            });
             $(this).closest("tr").remove();
         }
     })
@@ -113,6 +126,20 @@ $(document).ready(function(){
     $(".decline").click(function(e){
         e.preventDefault();
         if(confirm("Decline request?")){
+            $(this).closest("tr").remove();
+            var data = {}
+            data.username = $(this).closest("tr").find(".editRow").text();
+            data.option = 0
+            $.ajax({
+                type: 'POST',
+                data: JSON.stringify(data),
+                contentType: 'application/json',
+                url: '/admin/Request',						
+                success: function(data) {
+                    console.log(data)              
+             
+                }
+            });
             $(this).closest("tr").remove();
         }
     })
