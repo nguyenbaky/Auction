@@ -1,35 +1,46 @@
 var express = require('express')
 var router = express.Router()
+const Users = require("../models/User")
+const Cates = require("../models/cate")
 
-// view category
-router.get("/category",function(req,res){
-    var lv = res.locals.level;
-    if(lv === 0){
-        res.render("home",{page:"category"});
-    }
-    else if(lv === 1){
-        res.render("home",{page:"category",user:true,_id:res.locals._id});
+router.get("/",async function(req,res){ 
+    var {level} = res.locals;
+    var user,cates
+    await Cates.find({}).then(c => cates = c)
+    if(level === 0){     // Guest
+        res.render("home",{page:"home",cates})
     }
     else{
-        res.render("home",{page:"category",user:true,seller:true,_id:res.locals._id});
-    }    
+        await Users.findOne({_id:res.locals.id}).then(u => user = u)
+        res.render("home",{page:"home",user,cates})
+    }
+})
+
+// view category
+router.get("/category/:categoryID",async function(req,res){
+    var {level} = res.locals;
+    var user,cates
+    await Cates.find({}).then(c => cates = c)
+    if(level === 0){
+        res.render("home",{page:"category"});
+    }
+    else{
+        await Users.findOne({_id:res.locals.id}).then(u => user = u)
+        res.render("home",{page:"category",user,cates});
+    }  
 })
 
 // /chi-tiet-san-pham/:id_product
-router.get("/chi-tiet-san-pham",function(req,res){
-    var lv = res.locals.level;
-    console.log("level: "+lv);
-    if(lv === 0){
-        console.log("0");
+router.get("/chi-tiet-san-pham",async function(req,res){
+    var {level} = res.locals;
+    var user,cates
+    await Cates.find({}).then(c => cates = c)
+    if(level === 0){
         res.render("home",{page:"product_detail"});
-    }
-    else if(lv === 1){
-        console.log("01");
-        res.render("home",{page:"product_detail",user:true,_id:res.locals._id});
-    }
-    else{
-        console.log("2");
-        res.render("home",{page:"product_detail",user:true,seller:true,_id:res.locals._id});
+    }else{
+        
+        await Users.findOne({_id:res.locals.id}).then(u => user = u)        
+        res.render("home",{page:"product_detail",user,cates});
     }  
 })
 

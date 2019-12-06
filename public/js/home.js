@@ -1,9 +1,4 @@
-$( document ).ready(function() {
-    if(typeof(message) !== 'undefined'){
-        alert(message);
-    }
-    
-    
+$( document ).ready(function() {    
     $("#profile-tab").click(function(e){
         $("#profile-tab").addClass("active");
         $("#profile").removeClass("fade");
@@ -31,6 +26,24 @@ $( document ).ready(function() {
         $("#score").removeClass("fade");
         $("#score").fadeIn();
         $("#score-tab").addClass("active");
+    })
+
+    $('#upgrade').click(function (e) {
+        var data = {}
+        var id = $("#id").text()
+        data.is_update = 1
+        console.log(data)
+        $.ajax({
+            type: 'PUT',
+            data: JSON.stringify(data),
+            contentType: 'application/json',
+            url: 'request/' + id,						
+            success: function(data) {
+                if(data === "Thành công")  {
+                    location.reload()
+                }               
+            }
+        });
     })
 
 }); 

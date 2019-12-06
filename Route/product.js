@@ -1,18 +1,26 @@
 var express = require('express')
 var router = express.Router()
+const Users = require("../models/User")
+const Cates = require("../models/cate")
 
 // Hiện thông tin sản phẩm đang bán
-router.get("/:sellerID",function(req,res){
-    res.render("home",{page:"product",user:true,seller:true,_id:res.locals.userID});
+router.get("/:sellerID",async function(req,res){
+    var user,cates
+    await Users.findOne({_id:res.locals.id}).then(u => user = u)
+    await Cates.find({}).then(c => cates = c) 
+    res.render("home",{page:"product",user,cates});
 })
 // Hiện thông tin sản phẩm đã bán
-router.get("/sold/:sellerID",function(req,res){
-    res.render("home",{page:"sold_product",user:true,seller:true,_id:res.locals.userID});
+router.get("/sold/:sellerID",async function(req,res){
+    var user,cates
+    await Users.findOne({_id:res.locals.id}).then(u => user = u)
+    await Cates.find({}).then(c => cates = c)
+    res.render("home",{page:"sold_product",user,cates});
 })
 
 // Thêm sản phẩm bán
-router.get("/add/:sellerID",function(req,res){
-    res.render("pages/add_product",{page:"add_product",user:true,seller:true,_id:res.locals.userID});
+router.get("/add/:sellerID",async function(req,res){
+    res.render("pages/add_product",{page:"add_product",user,cates});
 })
 
 module.exports = router

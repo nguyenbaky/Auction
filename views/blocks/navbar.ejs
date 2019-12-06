@@ -1,10 +1,13 @@
 <base href="http://localhost:8000/">
-<nav class="navbar navbar-expand-lg navbar-light " style="background-color:rgb(140, 185, 185);">
-    <a class="navbar-brand" href="/">Auction</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+<nav class="navbar navbar-expand-lg navbar-light " style="background-color:rgb(140, 185, 185);">    
+    <a class="navbar-brand" href="#">
+        <i class="fa fa-home fa-lg" aria-hidden="true"></i>
+      </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
-    </button>
-    
+      </button>
+
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
         <li class="nav-item active">
@@ -16,47 +19,57 @@
             Thể loại
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="#">Books</a>
-            <a class="dropdown-item" href="#">Mobiles</a>
-            <a class="dropdown-item" href="#">Laptops</a>
-            <a class="dropdown-item" href="#">Clothes</a>
+            <% cates.forEach(function(cate,index){ %>
+                <a class="dropdown-item" href="/category/<%- cate._id %>"><%- cate.name %></a>
+
+            <% }) %>
+                
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="#">Something else here</a>
             </div>
         </li>
 
         <!-- bidder -->
-        <% if(typeof user != "undefined") { %>
-            <li class="nav-item active">
-                <a class="nav-link" href="/profile/<%- _id %>">Thông tin<span class="sr-only">(current)</span></a>
-            </li>
-  
-            <li class="nav-item active">
-                <a class="nav-link" href="/auction/<%- _id %>">Sản phẩm đang đấu giá<span class="sr-only">(current)</span></a>
-            </li>
-            
-            <li class="nav-item active">
-                <a class="nav-link" href="/auction/success/<%- _id %>">Đấu giá thành công<span class="sr-only">(current)</span></a>
+        <% if(typeof user !== "undefined") { %>
+            <li class="nav-item active" style="display: none;">
+                <a class="nav-link" id="id"><%- user._id %></a>
             </li>
 
             <li class="nav-item active">
-                <a class="nav-link" href="/favorite/<%- _id %>">Yêu thích<span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="/profile/<%- user._id %>">Thông tin<span class="sr-only">(current)</span></a>
+            </li>
+  
+            <li class="nav-item active">
+                <a class="nav-link" href="/auction/<%- user._id %>">Sản phẩm đang đấu giá<span class="sr-only">(current)</span></a>
+            </li>
+            
+            <li class="nav-item active">
+                <a class="nav-link" href="/auction/success/<%- user._id %>">Đấu giá thành công<span class="sr-only">(current)</span></a>
+            </li>
+
+            <li class="nav-item active">
+                <a class="nav-link" href="/favorite/<%- user._id %>">Yêu thích<span class="sr-only">(current)</span></a>
             </li>
              <!-- seller -->
-            <% if(typeof seller != "undefined") { %>
+            <% if(user.level === 2) { %>
                 <li class="nav-item active">
-                    <a class="nav-link" href="/product/<%- _id %>">Sản phẩm đang bán<span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="/product/<%- user._id %>">Sản phẩm đang bán<span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link" href="/product/sold/<%- _id %>">Sản phẩm đã bán<span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="/product/sold/<%- user._id %>">Sản phẩm đã bán<span class="sr-only">(current)</span></a>
                 </li>
-            <% }else{ %>
-                <button type="button" id="upgrade" class="btn btn-success">Nâng cấp</button>
             <% } %>
         <% } %> 
         </ul>
 
         <form class="form-inline my-2 my-lg-0">
+        <% if(typeof user !== "undefined") { %>
+            <% if(user.is_update !== 1){ %> 
+                <button type="button" id="upgrade" class="btn btn-success" style="margin: 5px;">Nâng cấp</button>
+            <% }else{ %> 
+                <button type="button" id="result" class="btn btn-default" style="margin: 5px;">Đã gửi</button>
+            <% } %>
+        <% } %>     
         <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
         <button class="btn btn-outline-success my-2 my-sm-0 float-right" type="submit">Search</button>
         </form>

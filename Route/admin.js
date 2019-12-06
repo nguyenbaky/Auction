@@ -92,7 +92,6 @@ router.post("/cate",async function(req,res){
     })
     await Cate.findOne({name},function (err,cate) {
         if(cate){
-            console.log(cate);
             return res.send("Category đã tồn tại !!!");
         }
         else{

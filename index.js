@@ -31,8 +31,8 @@ var users = require('./Route/user')
 
 //multer
 var multer  = require('multer');
-const Cate = require("./models/cate");
-const User = require("./models/User");
+const Cates = require("./models/cate");
+const Users = require("./models/User");
 const Products = require("./models/product");
 const cate = require("./models/cate");
 const admin = require("./models/admin");
@@ -79,45 +79,28 @@ function handleLevelUser(req,res,next){
     })
 }
 
-function passIdUser(req,res,next){
-    jwt.verify(req.session.token,secret,function(err,decoded){
-        res.locals.userID = decoded._id
-        next();
-    })
-}
-
-function checkLvUser(req,res,next){
+function getUser(req,res,next){
     if(typeof req.session.token === "undefined"){
         res.locals.level = 0;
     }
     else{
         jwt.verify(req.session.token,secret,function(err,decoded){
-            res.locals.level = decoded.level;
-            res.locals._id = decoded._id;
+            res.locals.id = decoded._id
         })
     }    
     next();
 }
 
-app.get("/",function(req,res){ 
-    if(typeof req.session.token != "undefined"){     
-        jwt.verify(req.session.token,secret,function(err,decoded){
-            if(decoded.level > 1){
-                // Seller
-                res.render("home",{page:"home",user:true,seller:true,_id:decoded._id})
-            }else{
-                // Bidder
-                res.render("home",{page:"home",user:true,_id:decoded._id})
-            }
-        })  
-    }
-    else{
-        // Guest 
-        res.render("home",{page:"home"})
-    }
-   
-    
-})
+
+// app.get("/",getUser,function(req,res){ 
+//     var {level,cates,user} = res.locals;
+//     if(level === 0){     // Guest
+//         res.render("home",{page:"home",cates})
+//     }
+//     else{
+//         res.render("home",{page:"home",user,cates})
+//     }
+// })
 
 // login
 app.get("/login",function(req,res){
@@ -125,11 +108,12 @@ app.get("/login",function(req,res){
 })
 
 app.post("/login",function(req,res){
-    User.findOne({email:req.body.email}).then(function(user){
+    Users.findOne({email:req.body.email}).then(function(user){
         if(user){
             // check user
             bcrypt.compare(req.body.pass, user.password, function(err, res2) {
                 if(res2 == true){
+                    res.locals.user = user
                     jwt.sign(user.toJSON(),secret,{expiresIn:'1d'},function(err,token){
                         if(err){
                             console.log("Token generate erro: "+ err);
@@ -179,11 +163,11 @@ app.get("/signup",function(req,res){
 })
 
 app.post("/signup",function(req,res){
-    User.findOne({username:req.body.username}).then(function(user){
+    Users.findOne({username:req.body.username}).then(function(user){
         if(user){
             return res.render("signup",{message:"Username already exists !!!"});
         }else{
-            User.findOne({email:req.body.email}).then(function(user){
+            Users.findOne({email:req.body.email}).then(function(user){
                 if(user){   
                     return res.render("signup",{message:"email used !!!"});
                 }
@@ -228,19 +212,19 @@ app.get("/logout",function(req,res){
 })
 
 // home route (Guest view)
-app.use('/',checkLvUser,home)
+app.use('/',getUser,home)
 
 // auction route (User view)
-app.use('/auction',handleUserRedirect,passIdUser,auction)
+app.use('/auction',handleUserRedirect,getUser,auction)
 
 // admin
 app.use("/admin",handleAdminRedirect,admins)
 
 // User view 
-app.use('/',handleUserRedirect,passIdUser,users)
+app.use('/',handleUserRedirect,getUser,users)
 
 // product route (seller view)
-app.use('/product',handleUserRedirect,handleLevelUser,passIdUser,products)
+app.use('/product',handleUserRedirect,handleLevelUser,getUser,products)
 
 
 
