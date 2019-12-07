@@ -8,6 +8,8 @@ const saltRounds = 10;
 
 //profile
 router.get("/profile/:userID",async function(req,res){
+    var id =  req.params.userID
+    if(res.locals.id !== id) return res.redirect("/profile/"+res.locals.id)
     var user,cates
     await Users.findOne({_id:res.locals.id}).then(u => user = u)
     await Cates.find({}).then(c => cates = c)
@@ -15,8 +17,9 @@ router.get("/profile/:userID",async function(req,res){
 })
 
 router.post("/profile/:userID",async function(req,res) {
-    var {username,ho_ten,email,dia_chi} = req.body
     var id =  req.params.userID
+    if(res.locals.id !== id) return res.redirect("/profile/"+res.locals.id)
+    var {username,ho_ten,email,dia_chi} = req.body    
     await Users.findOne({_id:id},function (err,user) {
         if(err) return res.send(err)
         else {
@@ -41,6 +44,9 @@ router.post("/profile/:userID",async function(req,res) {
 })
 
 router.put("change_password/:userID",async function(req,res){
+    var id =  req.params.userID
+    if(res.locals.id !== id) return res.redirect("/change_password/"+res.locals.id)
+
     var {oldpassword,password} = req.body
     bcrypt.hash(oldpassword,saltRounds,function(err,hash) {
         oldpassword = hash
@@ -48,7 +54,7 @@ router.put("change_password/:userID",async function(req,res){
     bcrypt.hash(password,saltRounds,function(err,hash){
         password = hash
     })
-    var id = req.params.userID
+
     await Users.findOneAndUpdate({_id:id,password:oldpassword},{password},function(err,user){
         if(err) return res.send(err)
         else return res.send("Đổi password thành công")

@@ -6,6 +6,8 @@ const Cates = require("../models/cate")
 //  /auction
 // auction/:user :Danh sách sản phẩm đang giá thành công
 router.get("/:userID",async function(req,res){
+    var id = req.params.userID
+    if(res.locals.id !== id) return res.redirect("/auction/"+res.locals.id)
     var user,cates
     await Users.findOne({_id:res.locals.id}).then(u => user = u)
     await Cates.find({}).then(c => cates = c)
@@ -14,6 +16,8 @@ router.get("/:userID",async function(req,res){
 
 // auction/success/:user :Danh sách sản phẩm đấu giá thành công
 router.get("/success/:userID",async function(req,res){
+    var id = req.params.userID
+    if(res.locals.id !== id) return res.redirect("/auction/success"+res.locals.id)
     var user,cates
     await Users.findOne({_id:res.locals.id}).then(u => user = u)
     await Cates.find({}).then(c => cates = c)
