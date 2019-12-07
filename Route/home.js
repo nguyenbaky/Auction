@@ -22,7 +22,7 @@ router.get("/category/:categoryID",async function(req,res){
     var user,cates
     await Cates.find({}).then(c => cates = c)
     if(level === 0){
-        res.render("home",{page:"category"});
+        res.render("home",{page:"category",cates});
     }
     else{
         await Users.findOne({_id:res.locals.id}).then(u => user = u)

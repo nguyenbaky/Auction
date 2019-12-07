@@ -1,3 +1,7 @@
 .active_category{
     background-color: cornflowerblue!important;
 }
+.arrow{
+    font-size: 14px;
+    line-height: 12px;
+}
