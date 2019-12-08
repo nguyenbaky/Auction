@@ -17,16 +17,19 @@ router.get("/",async function(req,res){
 })
 
 // view category
-router.get("/category/:categoryID",async function(req,res){
+router.get("/category/:categoryID/:p",async function(req,res){
     var {level} = res.locals;
-    var user,cates
+    var user,cates,cate
+    var {p} = req.params
+
     await Cates.find({}).then(c => cates = c)
+    await Cates.find({_id:req.params.categoryID}).sort({date_begin:-1}).then(c => cate = c)
     if(level === 0){
-        res.render("home",{page:"category",cates});
+        res.render("home",{page:"category",cates,cate,p});
     }
     else{
         await Users.findOne({_id:res.locals.id}).then(u => user = u)
-        res.render("home",{page:"category",user,cates});
+        res.render("home",{page:"category",user,cates,cate,p});
     }  
 })
 

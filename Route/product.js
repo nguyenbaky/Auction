@@ -26,7 +26,13 @@ router.get("/sold/:sellerID",async function(req,res){
 router.get("/add/:sellerID",async function(req,res){
     var id = req.params.sellerID
     if(res.locals.id !== id) return res.redirect("/product/add/"+res.locals.id)
+    await Users.findOne({_id:res.locals.id}).then(u => user = u)
+    await Cates.find({}).then(c => cates = c)
     res.render("pages/add_product",{page:"add_product",user,cates});
+})
+
+router.post("/add/:sellerID",async function(req,res){
+    res.send(req.body)
 })
 
 module.exports = router
