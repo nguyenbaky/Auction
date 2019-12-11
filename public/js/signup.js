@@ -11,7 +11,5 @@ function check()
         alert("password not match !!!!");
         return false;
     }
-   
-
 }
  

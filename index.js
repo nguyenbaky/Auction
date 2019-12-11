@@ -7,6 +7,17 @@ app.listen(8000,function(){
     console.log("Running on local host 8000 !!!");
 });
 
+// mail 
+var nodemailer = require('nodemailer');
+var transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: 'tq237006@gmail.com',
+      pass: 'qtran0987654321'
+    }
+  });
+
+
 // body-parser
 var bodyParser = require('body-parser')
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -92,19 +103,9 @@ function getUser(req,res,next){
 }
 
 
-// app.get("/",getUser,function(req,res){ 
-//     var {level,cates,user} = res.locals;
-//     if(level === 0){     // Guest
-//         res.render("home",{page:"home",cates})
-//     }
-//     else{
-//         res.render("home",{page:"home",user,cates})
-//     }
-// })
-
 // login
 app.get("/login",function(req,res){
-    res.render("login");
+    res.render("login",{page:"login"});
 })
 
 app.post("/login",function(req,res){
@@ -116,7 +117,7 @@ app.post("/login",function(req,res){
                     res.locals.user = user
                     jwt.sign(user.toJSON(),secret,{expiresIn:'1d'},function(err,token){
                         if(err){
-                            console.log("Token generate erro: "+ err);
+                            console.log("Token generate error: "+ err);
                         }else{                            
                             req.session.token = token;
                             req.session.save();
@@ -126,7 +127,7 @@ app.post("/login",function(req,res){
                     return res.redirect("/");
                    
                 }else{
-                    return res.render("login",{message:"Wrong password !!!"});
+                    return res.render("login",{page:"login",message:"Wrong password !!!"});
                 }
             });
         }
@@ -145,12 +146,12 @@ app.post("/login",function(req,res){
                             return res.redirect("/admin");
                             });
                         }else{
-                            return res.render("login",{message:"Wrong password !!!"});
+                            return res.render("login",{page:"login",message:"Wrong password !!!"});
                         }
                     });
                 }
                 else{                    
-                    return res.render("login",{message:"Wrong email !!!"});
+                    return res.render("login",{page:"login",message:"Wrong email !!!"});
                 }
             })
         }
@@ -159,22 +160,22 @@ app.post("/login",function(req,res){
 
 // sign up
 app.get("/signup",function(req,res){
-    res.render("signup");
+    res.render("login",{page:"signup"});
 })
 
 app.post("/signup",function(req,res){
     Users.findOne({username:req.body.username}).then(function(user){
         if(user){
-            return res.render("signup",{message:"Username already exists !!!"});
+            return res.render("signup",{page:"signup",message:"Username already exists !!!"});
         }else{
             Users.findOne({email:req.body.email}).then(function(user){
                 if(user){   
-                    return res.render("signup",{message:"email used !!!"});
+                    return res.render("login",{page:"signup",message:"email used !!!"});
                 }
                 else{
                     admin.findOne({email:req.body.email}).then(function(admin){
                         if(admin){       
-                            return res.render("signup",{message:"email used !!!"});
+                            return res.render("signup",{page:"signup",message:"email used !!!"});
                         }
                         else{
                             bcrypt.hash(req.body.pass, saltRounds, function(err, hash) {
@@ -205,11 +206,69 @@ app.post("/signup",function(req,res){
     })
 })
 
+app.get("/forgot",function(req,res){
+    res.render("login",{page:"forgot"})
+})
+
+app.post("/forgot",async(req,res)=>{
+    var {email} = req.body
+    var user = await Users.findOne({email}).catch(err => {
+        return res.render("login",{page:"forgot_password",message:"Email not found"})
+    })
+    jwt.sign(user.toJSON(),secret,{expiresIn:'5m'},function(err,token){
+        if(err){
+            console.log("Token generate error: "+ err);
+        }else{                            
+            var mailOptions = {
+                from: 'tq237006@gmail.com',
+                to: email,
+                subject: 'Reset password',
+                text: 'Reset password link: http://localhost:8000/reset_password/'+token
+                };
+            transporter.sendMail(mailOptions, function(error, info){
+                if (error) {
+                    console.log(error);
+                } else {
+                    console.log('Email sent: ' + info.response);
+                    return res.send("Check your email to reset password")
+                }
+                });   
+        }
+    });
+ 
+    
+})
+
+app.get("/reset_password/:token",(req,res)=>{
+    jwt.verify(req.params.token,secret,function(err,decoded){
+        res.render("login",{page:"reset_password",user:decoded})
+    })
+})
+
+app.post("/reset_password/:id",(req,res)=>{
+    var {_id,password} = req.body;
+    console.log(_id)
+    console.log(password)
+
+    bcrypt.hash(password,saltRounds,async function (err,hash) {
+        if(!err){
+            await Users.findOneAndUpdate({_id},{password:hash},function (err,u) {
+                if(err) return res.send("Something went wrong !!!")
+                else return res.send("Đổi password mới thành công !!!")         
+            })
+        }else{
+            return res.send("Something went wrong !!!")
+        }
+    })
+})
+
 // logout 
 app.get("/logout",function(req,res){
     req.session.destroy()
     res.redirect("/")
 })
+
+
 
 // home route (Guest view)
 app.use('/',getUser,home)

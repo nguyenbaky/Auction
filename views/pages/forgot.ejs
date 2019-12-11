@@ -1,0 +1,24 @@
+<form class="login100-form validate-form" action="" method="POST">
+    <span class="login100-form-title p-b-43">
+        Forgot password
+    </span>
+
+    <div class="wrap-input100 validate-input" data-validate="Valid email is required: ex@abc.xyz">
+        <input class="input100" type="text" name="email" id="email">
+        <span class="focus-input100"></span>
+        <span class="label-input100">Email</span>
+    </div>
+    
+
+    <% if(typeof message != "undefined") { %>
+        <span style="color: red;"> <%- message %></span>
+    <% } %>
+
+
+    <div class="container-Register100-form-btn" >
+        <button id="forgot" class="Register100-form-btn" type="submit">
+            Submit
+        </button>
+    </div>
+
+</form>
