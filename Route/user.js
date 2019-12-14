@@ -10,9 +10,10 @@ const saltRounds = 10;
 router.get("/profile/:userID",async function(req,res){
     var id =  req.params.userID
     if(res.locals.id !== id) return res.redirect("/profile/"+res.locals.id)
-    var user,cates
-    await Users.findOne({_id:res.locals.id}).then(u => user = u)
-    await Cates.find({}).then(c => cates = c)
+    var [user,cates] = Promise.all([
+        Users.findOne({_id:res.locals.id}),
+        Cates.find({})
+    ])
     res.render("home",{page:"profile",user,cates});
 })
 
@@ -63,9 +64,10 @@ router.put("change_password/:userID",async function(req,res){
 
 // /favorite/:user
 router.get("/favorite/:userID",async function(req,res){
-    var user,cates
-    await Users.findOne({_id:res.locals.id}).then(u => user = u)
-    await Cates.find({}).then(c => cates = c)
+    var [user,cates] = Promise.all([
+        Users.findOne({_id:res.locals.id}),
+        Cates.find({})
+    ])
     res.render("home",{page:"favorite",user,cates});
 })
 // update level
