@@ -37,18 +37,22 @@ const upload = multer({
 router.get("/:sellerID",async function(req,res){
     var id = req.params.sellerID
     if(res.locals.id !== id) return res.redirect("/product/"+res.locals.id) 
-    var user = await Users.findOne({_id:res.locals.id})
-    var cates= await Cates.find({})       
-    var products = await Products.find({Seller:req.params.sellerID})  
+    var [user,cates,products] = await Promise.all([
+        Users.findOne({_id:res.locals.id}),
+        Cates.find({}),
+        Products.find({Seller:req.params.sellerID})
+    ])  
     res.render("home",{page:"product",user,cates,products});
 })
 // Hiện thông tin sản phẩm đã bán
 router.get("/sold/:sellerID",async function(req,res){
     var id = req.params.sellerID
     if(res.locals.id !== id) return res.redirect("/product/sold/"+res.locals.id)    
-    var user = await Users.findOne({_id:res.locals.id})
-    var cates= await Cates.find({})         
-    var products = await Products.find({Seller:req.params.sellerID})
+    var [user,cates,products] = await Promise.all([
+        Users.findOne({_id:res.locals.id}),
+        Cates.find({}),
+        Products.find({Seller:req.params.sellerID})
+    ])  
     res.render("home",{page:"sold_product",user,cates,products});
 })
 
@@ -56,8 +60,10 @@ router.get("/sold/:sellerID",async function(req,res){
 router.get("/add/:sellerID",async function(req,res){
     var id = req.params.sellerID
     if(res.locals.id !== id) return res.redirect("/product/add/"+res.locals.id) 
-    var user = await Users.findOne({_id:res.locals.id})
-    var cates= await Cates.find({})         
+    var [user,cates,products] = await Promise.all([
+        Users.findOne({_id:res.locals.id}),
+        Cates.find({}),
+    ])        
     res.render("pages/add_product",{page:"add_product",user,cates});
 })
 
