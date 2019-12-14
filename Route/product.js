@@ -40,7 +40,10 @@ router.get("/:sellerID",async function(req,res){
     var [user,cates,products] = await Promise.all([
         Users.findOne({_id:res.locals.id}),
         Cates.find({}),
-        Products.find({Seller:req.params.sellerID})
+        Products.find({
+            Seller:req.params.sellerID,
+            '$where': date_end < new Date()
+        })
     ])  
     res.render("home",{page:"product",user,cates,products});
 })
@@ -51,7 +54,10 @@ router.get("/sold/:sellerID",async function(req,res){
     var [user,cates,products] = await Promise.all([
         Users.findOne({_id:res.locals.id}),
         Cates.find({}),
-        Products.find({Seller:req.params.sellerID})
+        Products.find({
+            Seller:req.params.sellerID,
+            '$where': date_end > new Date()
+        })
     ])  
     res.render("home",{page:"sold_product",user,cates,products});
 })
