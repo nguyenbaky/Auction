@@ -1,6 +1,7 @@
 var express = require('express')
 var router = express.Router()
 var moment = require("moment")
+
 const Users = require("../models/User")
 const Cates = require("../models/cate")
 const Products = require("../models/product")
@@ -35,28 +36,28 @@ const upload = multer({
 // Hiện thông tin sản phẩm đang bán
 router.get("/:sellerID",async function(req,res){
     var id = req.params.sellerID
-    if(res.locals.id !== id) return res.redirect("/product/"+res.locals.id)
-    var user,cates
-    await Users.findOne({_id:res.locals.id}).then(u => user = u)
-    await Cates.find({}).then(c => cates = c) 
-    res.render("home",{page:"product",user,cates});
+    if(res.locals.id !== id) return res.redirect("/product/"+res.locals.id) 
+    var user = await Users.findOne({_id:res.locals.id})
+    var cates= await Cates.find({})       
+    var products = await Products.find({Seller:req.params.sellerID})  
+    res.render("home",{page:"product",user,cates,products});
 })
 // Hiện thông tin sản phẩm đã bán
 router.get("/sold/:sellerID",async function(req,res){
     var id = req.params.sellerID
-    if(res.locals.id !== id) return res.redirect("/product/sold/"+res.locals.id)
-    var user,cates
-    await Users.findOne({_id:res.locals.id}).then(u => user = u)
-    await Cates.find({}).then(c => cates = c)
-    res.render("home",{page:"sold_product",user,cates});
+    if(res.locals.id !== id) return res.redirect("/product/sold/"+res.locals.id)    
+    var user = await Users.findOne({_id:res.locals.id})
+    var cates= await Cates.find({})         
+    var products = await Products.find({Seller:req.params.sellerID})
+    res.render("home",{page:"sold_product",user,cates,products});
 })
 
 // Thêm sản phẩm bán
 router.get("/add/:sellerID",async function(req,res){
     var id = req.params.sellerID
-    if(res.locals.id !== id) return res.redirect("/product/add/"+res.locals.id)
-    await Users.findOne({_id:res.locals.id}).then(u => user = u)
-    await Cates.find({}).then(c => cates = c)
+    if(res.locals.id !== id) return res.redirect("/product/add/"+res.locals.id) 
+    var user = await Users.findOne({_id:res.locals.id})
+    var cates= await Cates.find({})         
     res.render("pages/add_product",{page:"add_product",user,cates});
 })
 
