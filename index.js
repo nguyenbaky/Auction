@@ -20,7 +20,7 @@ var transporter = nodemailer.createTransport({
 
 // body-parser
 var bodyParser = require('body-parser')
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
 var mongoose = require("mongoose");
