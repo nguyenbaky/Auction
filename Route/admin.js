@@ -80,9 +80,8 @@ router.post("/request",async function (req,res) {
 
 // category 1
 router.get("/category",async function(req,res){
-    let cate = await Cate.find({},function(err,cates){
-        res.render("admin",{page:"Category",cates});
-    })    
+    var cates = await Cate.find({})
+        res.render("admin",{page:"Category",cates});    
 })
 //// add cateogory 1
 router.post("/cate",async function(req,res){
@@ -130,7 +129,7 @@ router.delete("/cate",async function(req,res) {
     var {id} = req.body;
     await Cate.findOne({_id:id},function (err,cate) {
         if(cate.categoryID.toString() === ""){
-            cate.delete(function (err,c) {
+            cate.delete(function (err) {
                 if(!err){
                     return res.send("Xóa thành công");
                 }             

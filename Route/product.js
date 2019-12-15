@@ -37,26 +37,34 @@ const upload = multer({
 router.get("/:sellerID",async function(req,res){
     var id = req.params.sellerID
     if(res.locals.id !== id) return res.redirect("/product/"+res.locals.id) 
+    var day = new Date();
+    var y =day.getFullYear()
+    var m = day.getMonth() + 1
+    var d = day.getDate() 
+    var n = y+"-"+m+"-"+d
     var [user,cates,products] = await Promise.all([
         Users.findOne({_id:res.locals.id}),
         Cates.find({}),
         Products.find({
             Seller:req.params.sellerID,
-            '$where': date_end < new Date()
+            date_end:{$lte:n}
         })
     ])  
     res.render("home",{page:"product",user,cates,products});
 })
+
 // Hiện thông tin sản phẩm đã bán
 router.get("/sold/:sellerID",async function(req,res){
     var id = req.params.sellerID
+    var d = new Date();
+    var n = d.toISOString();
     if(res.locals.id !== id) return res.redirect("/product/sold/"+res.locals.id)    
     var [user,cates,products] = await Promise.all([
         Users.findOne({_id:res.locals.id}),
         Cates.find({}),
         Products.find({
             Seller:req.params.sellerID,
-            '$where': date_end > new Date()
+            date_end:{$gt:n}
         })
     ])  
     res.render("home",{page:"sold_product",user,cates,products});
@@ -98,7 +106,9 @@ router.post("/add/:sellerID",async function(req,res){
                 Seller: req.body.seller,
                 date_begin: date_begin,
                 date_end : date_end,
-                categoryID: req.body.selectCate
+                categoryID: req.body.selectCate,
+                Gia_Hien_Tai: req.body.Gia_Khoi_Diem,
+                Num_bid: 0
             })
            
             p.save(function(err){
@@ -138,5 +148,18 @@ router.post("/add/:sellerID",async function(req,res){
 
 })
 
+// cap nhat gia hien tai
+router.put("/:productID",async function (req,res) {
+    var id = req.params.productID
+    var {Gia_Hien_Tai,bidder,thoi_diem} = req.body
+    await Products.findOneAndUpdate(
+        {_id:id},
+        {Num_bid: Num_bid+1, Gia_Hien_Tai, 
+        $push:{Bid_price: Gia_Hien_Tai,Bidder: bidder, thoi_diem:thoi_diem}},
+        function(err){
+            if(err) return res.send(err)
+            else return res.send("Đấu giá thành công !!")
+        })
+})
 
 module.exports = router

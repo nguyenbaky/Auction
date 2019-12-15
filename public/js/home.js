@@ -46,4 +46,61 @@ $( document ).ready(function() {
         });
     })
 
+    $('.favorite').click(function(e){
+        e.preventDefault();
+        
+    })
+
+    $('.buy').click(function (e) {
+        e.preventDefault();
+    })
+
+   
 }); 
+
+function increaseValue(buoc_gia) {
+    var value = parseInt(document.getElementById('number').value, 10);
+    value += buoc_gia;
+    document.getElementById('number').value = value;
+  }
+  
+function decreaseValue(gia_hien_tai,buoc_gia) {
+    var value = parseInt(document.getElementById('number').value, 10);
+    value -= buoc_gia
+    value < gia_hien_tai ? value = gia_hien_tai: value
+    document.getElementById('number').value = value;
+}
+
+function bid(gia_hien_tai) {
+    var value = parseInt(document.getElementById('number').value, 10);
+    if(value < gia_hien_tai) {
+        alert("Bước giá thấp hơn qui định")
+        return
+    }
+    var d = new Date();
+    var y = d.getFullYear()
+    var m = d.getMonth() + 1
+    var day = d.getDate() 
+    var h = d.getHours()
+    var mi = d.getMinutes()
+    var n = y+"-"+m+"-"+day+" "+h+":"+mi
+
+    var data = {}
+    var url = window.location.pathname.split("/")
+    var id = url[2]
+  
+    data.Gia_Hien_Tai = value
+    data.bidder = document.getElementById("bidder").textContent;
+    data.thoi_diem = n
+
+    $.ajax({
+        type: 'PUT',
+        data: JSON.stringify(data),
+        contentType: 'application/json',
+        url: '/product/'+id,						
+        success: function(data) {
+            alert(data);    
+            location.reload();                    
+        }
+    });
+}

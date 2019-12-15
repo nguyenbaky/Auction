@@ -27,7 +27,7 @@ $(document).ready(function(){
 
     $("#datepicker").datepicker({         
         "autoclose": true,         
-        "format":"yyyy-mm-dd"
+        "format":"dd-mm-yyyy"
     })
     $("#date").click(function(e){
         $(this).attr("readonly","true")

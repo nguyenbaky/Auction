@@ -64,6 +64,8 @@ router.put("change_password/:userID",async function(req,res){
 
 // /favorite/:user
 router.get("/favorite/:userID",async function(req,res){
+    var id =  req.params.userID
+    if(res.locals.id !== id) return res.redirect("/favorite/"+res.locals.id)
     var [user,cates] = Promise.all([
         Users.findOne({_id:res.locals.id}),
         Cates.find({})
@@ -72,6 +74,8 @@ router.get("/favorite/:userID",async function(req,res){
 })
 // update level
 router.put("/request/:userID",async function(req,res) {
+    var id =  req.params.userID
+    if(res.locals.id !== id) return res.redirect("/request/"+res.locals.id)
     var {userID} = req.params
     await Users.findOneAndUpdate({_id:userID},{is_update:1} ,function(err,u){
         if(!err) {
