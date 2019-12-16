@@ -37,19 +37,23 @@ const upload = multer({
 router.get("/:sellerID",async function(req,res){
     var id = req.params.sellerID
     if(res.locals.id !== id) return res.redirect("/product/"+res.locals.id) 
-    var day = new Date();
-    var y =day.getFullYear()
-    var m = day.getMonth() + 1
-    var d = day.getDate() 
-    var n = y+"-"+m+"-"+d
-    var [user,cates,products] = await Promise.all([
+
+    var d = new Date();
+    var y = d.getFullYear()
+    var m = d.getMonth() + 1
+    var day = d.getDate() 
+    var h = d.getHours()
+    var mi = d.getMinutes()
+    var n = y+"-"+m+"-"+day+" "+h+":"+mi
+    
+    var [user,cates] = await Promise.all([
         Users.findOne({_id:res.locals.id}),
-        Cates.find({}),
-        Products.find({
-            Seller:req.params.sellerID,
-            date_end:{$lte:n}
-        })
+        Cates.find({})    
     ])  
+    var products = await Products.find({
+        Seller    : user.username,
+        date_end  : {$gt:n}
+    })
     res.render("home",{page:"product",user,cates,products});
 })
 
@@ -74,7 +78,7 @@ router.get("/sold/:sellerID",async function(req,res){
 router.get("/add/:sellerID",async function(req,res){
     var id = req.params.sellerID
     if(res.locals.id !== id) return res.redirect("/product/add/"+res.locals.id) 
-    var [user,cates,products] = await Promise.all([
+    var [user,cates] = await Promise.all([
         Users.findOne({_id:res.locals.id}),
         Cates.find({}),
     ])        
@@ -94,29 +98,30 @@ router.post("/add/:sellerID",async function(req,res){
             var d = req.body.date_end
             var h = req.body.hour
             var m = req.body.min
+            d = moment(d,'DD/MM/YYYY').format('YYYY-MM-DD')
             var date_end = d+" "+h+":"+m+":0"
             var date_begin = new Date()
             date_begin = moment(date_begin,'DD/MM/YYYY').format('YYYY-MM-DD h:m:s')
 
             var p = new Products({
-                name: req.body.name,
-                Gia_Khoi_Diem: req.body.Gia_Khoi_Diem,
-                Buoc_gia:req.body.Buoc_gia,
-                description:req.body.content,
-                Seller: req.body.seller,
-                date_begin: date_begin,
-                date_end : date_end,
-                categoryID: req.body.selectCate,
-                Gia_Hien_Tai: req.body.Gia_Khoi_Diem,
-                Num_bid: 0
+                name           : req.body.name,
+                Gia_Khoi_Diem  : req.body.Gia_Khoi_Diem,
+                Buoc_gia       : req.body.Buoc_gia,
+                description    : req.body.content,
+                Seller         : req.body.seller,
+                date_begin     : date_begin,
+                date_end       : date_end,
+                categoryID     : req.body.selectCate,
+                Gia_Hien_Tai   : req.body.Gia_Khoi_Diem,
+                Num_bid        : 0
             })
-           
+            
+            console.log("before save")
             p.save(function(err){
-                if(err){
-                    return res.status(500).send(err)
-                }
+                if(err) console.log(err)
             })
 
+            console.log("saved")
             // Thêm sp vào cate
             Categorys.findOneAndUpdate(
                 {_id:req.body.selectCate},
@@ -127,22 +132,24 @@ router.post("/add/:sellerID",async function(req,res){
                     }
                 }
                 )
-
+                console.log("added")
             // Lưu URL Images
             for(i = 0; i < req.files.length;i++){
+                console.log("in for")
                 Products.findOneAndUpdate(
                     {_id:p._id},
                     {$push : {images:req.files[i].filename}},
                     function(err){
                         if(err){
-                            return res.status(500).send(err)
+                            console.log(err)
                         }else{
-                            return res.redirect("/product/"+req.params.sellerID)
+                            console.log("them thanh cong ")
                         }
                     }
                     )
             }
-        }
+            return res.redirect("/product/"+req.params.sellerID)
+        }        
     })
 
 

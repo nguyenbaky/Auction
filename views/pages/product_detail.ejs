@@ -36,21 +36,18 @@
             <h4>Iphone X</h4>
             <h4>Giá hiện tại: <%- p.Gia_Hien_Tai %>đ</h4>
             <h4>Bước giá: <%- p.Buoc_gia %>đ</h4>
-            <h4>Người bán: X &nbsp&nbsp&nbsp Điểm: 0 &nbsp&nbsp&nbsp <i class="fa fa-thumbs-up" data-toggle="modal" data-target="#myModal"></i>
-                <i class="fa fa-thumbs-down" data-toggle="modal" data-target="#myModal"></i></h4>
+            <h4>Người bán: <%- p.Seller %> &nbsp&nbsp&nbsp Điểm: 0 &nbsp&nbsp&nbsp <i class="fa fa-thumbs-up " id="up" data-toggle="modal" data-target="#myModal"></i>
+                <i class="fa fa-thumbs-down" id="down" data-toggle="modal" data-target="#myModal"></i></h4>
             <h4>Người đặt cao nhất hiện tại: Y &nbsp&nbsp&nbsp Điểm: 8</h4>
             <h4>Thời điểm đăng: <%- p.date_begin %> </h4>
             <h4>Thời điểm kết thúc: <%- p.date_end %></h4>
             <h4>Mô tả chi tiết: </h4>
-            <!-- <% if(typeof user !== "undefined"){ %> -->
-                <!-- <div style="display: none;" id="bidder"><%- user.username %></div> -->
-            
-            <!-- <% } %> -->
             <a class="btn btn-sm btn-outline-primary buy" href="#" role="button" 
                 style="position: absolute;bottom: 10px!important;" data-toggle="modal" data-target="#buyModal">
                 <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                 Đấu giá
             </a>
+        
         </div>
         
     </div>
@@ -90,10 +87,14 @@
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
-                <textarea style="width: 100%;"> </textarea>
+                <div id="seller" style="display: none;"><%- p.seller %></div>
+                <% if(typeof user !== "undefined"){ %>
+                    <div id="user" style="display: none;"><%- user.username %></div>
+                <% } %>
+                <textarea id="comment" style="width: 100%;"> </textarea>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default cmt-btn" data-dismiss="modal">Submit</button>
+                <button type="button" class="btn btn-default cmt-btn send" data-dismiss="modal">Submit</button>
             </div>
             </div> 
         </div>

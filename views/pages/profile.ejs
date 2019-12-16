@@ -92,7 +92,16 @@
     </div>
 
     <div class="tab-pane fade" id="score" aria-labelledby="score-tab" role="tabpanel">
-        10
+        <% comments.forEach(function(comment,index){ %>
+            <div class="card" style="margin:20px">
+                <div class="card-header" >
+                  <%- comment.sender %>
+                </div>
+                <div class="card-body">
+                  <p class="card-text"><%- comment.comment  %></p>
+                </div>
+            </div>
+        <% }) %>        
     </div>
 </div>
 

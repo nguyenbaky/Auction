@@ -50,8 +50,6 @@ router.get("/chi-tiet-san-pham/:productID",async function(req,res){
         Cates.find({}),
         Products.findOne({_id:req.params.productID})
     ])
-    console.log(p)
-    console.log(p.thoi_diem.length)
     if(level === 0){
         res.render("home",{page:"product_detail",cates,p});
     }else{      

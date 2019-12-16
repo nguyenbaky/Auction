@@ -1,24 +1,28 @@
 var express = require('express')
 var router = express.Router()
+
 const Users = require("../models/User")
 const Cates = require("../models/cate")
+const Comments = require("../models/Comment")
 
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
 //profile
 router.get("/profile/:userID",async function(req,res){
-    var id =  req.params.userID
+    var id = req.params.userID
+    console.log(res.locals.id)
     if(res.locals.id !== id) return res.redirect("/profile/"+res.locals.id)
-    var [user,cates] = Promise.all([
+    var [user,cates] = await Promise.all([
         Users.findOne({_id:res.locals.id}),
         Cates.find({})
     ])
-    res.render("home",{page:"profile",user,cates});
+    var comments = await Comments.find({name:user.username})
+    res.render("home",{page:"profile",user,cates,comments});
 })
 
 router.post("/profile/:userID",async function(req,res) {
-    var id =  req.params.userID
+    var id = req.params.userID
     if(res.locals.id !== id) return res.redirect("/profile/"+res.locals.id)
     var {username,ho_ten,email,dia_chi} = req.body    
     await Users.findOne({_id:id},function (err,user) {
@@ -44,8 +48,8 @@ router.post("/profile/:userID",async function(req,res) {
     })
 })
 
-router.put("change_password/:userID",async function(req,res){
-    var id =  req.params.userID
+router.put("/change_password/:userID",async function(req,res){
+    var id = req.params.userID
     if(res.locals.id !== id) return res.redirect("/change_password/"+res.locals.id)
 
     var {oldpassword,password} = req.body
@@ -64,9 +68,9 @@ router.put("change_password/:userID",async function(req,res){
 
 // /favorite/:user
 router.get("/favorite/:userID",async function(req,res){
-    var id =  req.params.userID
+    var id = req.params.userID
     if(res.locals.id !== id) return res.redirect("/favorite/"+res.locals.id)
-    var [user,cates] = Promise.all([
+    var [user,cates] = await Promise.all([
         Users.findOne({_id:res.locals.id}),
         Cates.find({})
     ])
@@ -74,7 +78,7 @@ router.get("/favorite/:userID",async function(req,res){
 })
 // update level
 router.put("/request/:userID",async function(req,res) {
-    var id =  req.params.userID
+    var id = req.params.userID
     if(res.locals.id !== id) return res.redirect("/request/"+res.locals.id)
     var {userID} = req.params
     await Users.findOneAndUpdate({_id:userID},{is_update:1} ,function(err,u){
@@ -85,5 +89,17 @@ router.put("/request/:userID",async function(req,res) {
     })
 })
 
+//comment
+router.post("/comment",async function (req,res) {
+    var {name,sender,comment,point} = req.body
+    var cmt = new Comments({
+        name,sender,comment,point
+    })
+
+    cmt.save(function(err){
+        if(err) return res.send(err)
+        else return res.send("comment thành công !!!")
+    })
+})
 
 module.exports = router

@@ -1,4 +1,6 @@
-$( document ).ready(function() {    
+$( document ).ready(function() { 
+    var point = 0
+
     $("#profile-tab").click(function(e){
         $("#profile-tab").addClass("active");
         $("#profile").removeClass("fade");
@@ -53,9 +55,48 @@ $( document ).ready(function() {
 
     $('.buy').click(function (e) {
         e.preventDefault();
+        if($("#user").text() === ""){
+            $(this).removeAttr('data-target');
+            alert("You have to loggin first to bid !!")       
+            return
+        }
     })
 
-   
+    $("#up").click(function (e) {
+        if($("#user").text() === ""){
+            $(this).removeAttr('data-target');
+            alert("You have to loggin first to comment seller !!")       
+            return
+        }
+        point = 1
+    })
+
+    $("#down").click(function(e){
+        if($("#user").text() === ""){
+            $(this).removeAttr('data-target');
+            alert("You have to loggin first to comment seller !!")       
+            return
+        }
+        point = -1
+    })
+
+   $('.send').click(function (e) {
+       var data = {}
+       data.sender = $("#user").text()
+       data.name = $("seller").text()
+       data.comment = 4("#comment").text()
+       data.point = point
+
+       $.ajax({
+        type: 'POST',
+        data: JSON.stringify(data),
+        contentType: 'application/json',
+        url: '/comment',						
+        success: function(data) {
+            console.log(data)                   
+        }
+    });
+   })
 }); 
 
 function increaseValue(buoc_gia) {

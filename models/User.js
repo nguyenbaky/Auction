@@ -14,6 +14,7 @@ const userSchema = new mongoose.Schema({
     dob           : String,
     comment       : [{type:mongoose.Schema.Types.String}],
     diem_danh_gia : Number,
+    n_danh_gia    : Number
 })
 
 module.exports = mongoose.model("User", userSchema);

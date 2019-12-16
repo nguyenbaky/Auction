@@ -180,14 +180,15 @@ app.post("/signup",function(req,res){
                         else{
                             bcrypt.hash(req.body.pass, saltRounds, function(err, hash) {
                                 var u = new User({
-                                    ho_ten: req.body.name,
-                                    username: req.body.username,
-                                    email: req.body.email,
-                                    password: hash,
-                                    dia_chi: req.body.address,
-                                    diem: 0,
-                                    level: 1,
-                                    is_update: 0 
+                                    ho_ten        : req.body.name,
+                                    username      : req.body.username,
+                                    email         : req.body.email,
+                                    password      : hash,
+                                    dia_chi       : req.body.address,
+                                    diem_danh_gia : 0,
+                                    level         : 1,
+                                    is_update     : 0 ,
+                                    n_danh_gia    : 0
                                 })
                                 u.save(function(err){
                                     if(err){

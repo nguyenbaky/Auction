@@ -29,7 +29,7 @@ $( document ).ready(function() {
         $("#address").val("")
     })
 
-    $("#change").clink(function(e){
+    $("#change").click(function(e){
         var oldpassword = $("#oldpassword").text()
         var newpassword = $("#newpassword").text()
         var confirmnewpassword = $("#confirmnewpassword").text()

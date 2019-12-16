@@ -1,2 +1,21 @@
 <h2 style="display: inline;padding: 15px;"> Danh sách sản phẩm đang bán</h2>
 <button class="btn btn-primary" style="right:200px!important;"><a href="/product/add/<%- user._id %>" style="text-decoration: none;color:blanchedalmond">ADD</a></button>
+<div class="row" style="padding: 20px;">
+    <% products.forEach(function(p,index){ %>    
+      <div class="col-sm-3 mb-3">
+        <div class="card h-100">
+          <img src="upload/<%- p.images[0] %>" alt="ProName" title="ProName" class="card-img-top">
+          <div class="card-body">
+            <h6 class="card-title" style="text-align: center;"><%- p.name %></h6>
+            <h5 class="card-title text-danger" style="text-align: center;"><%- p.Gia_Hien_Tai %></h5>
+          </div>
+          <div class="card-footer text-center">
+            <a class="btn btn-sm btn-outline-primary" href="/chi-tiet-san-pham/<%- p._id %>" role="button">
+              <i class="fa fa-eye" aria-hidden="true"></i>
+              Details
+            </a>          
+          </div>
+        </div>
+      </div>
+    <% }) %>
+  </div>
