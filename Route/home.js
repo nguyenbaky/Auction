@@ -1,8 +1,10 @@
 var express = require('express')
 var router = express.Router()
+
 const Users = require("../models/User")
 const Cates = require("../models/cate")
 const Products = require("../models/product")
+const Categories = require("../models/category")
 
 router.get("/",async function(req,res){ 
     var day = new Date();
@@ -24,22 +26,40 @@ router.get("/",async function(req,res){
         var user = await Users.findOne({_id:res.locals.id})
         res.render("home",{page:"home",user,cates,P_Highest,P_Old,P_Hot})
     }
+
+})
+
+router.get("/category/:cateID",async function(req,res){
+    var {level} = res.locals;
+    var [cates,cate]= await Promise.all([
+        Cates.find({}),
+        Cates.findOne({_id:req.params.cateID})
+    ])
+    var categories = await Categories.find({_id: {$in : cate.categoryID}})
+    if(level === 0){
+        res.render("home",{page:"cate",cates,cate,categories})
+    }else{
+        var user = await Users.findOne({_id:res.locals.id})
+        res.render("home",{page:"cate",cates,cate,categories,user})
+    }
+    
 })
 
 // view category
-router.get("/category/:categoryID/:p",async function(req,res){
-    var {level} = res.locals;
-    var {p} = req.params
-    var [cates,cate]= await Promise.all([
+router.get("/category/:cateID/:categoryID",async function(req,res){
+    var {level} = res.locals;  
+    var [cates,category]= await Promise.all([
         Cates.find({}),
-        Cates.find({_id:req.params.categoryID}).sort({date_begin:-1})
+        Categories.findOne({_id:req.params.categoryID})
     ]) 
+    var products = await Products.find({_id: {$in: category.productID}})
+
     if(level === 0){
-        res.render("home",{page:"category",cates,cate,p});
+        res.render("home",{page:"category",cates,products,category});
     }
     else{
         var user = await Users.findOne({_id:res.locals.id})
-        res.render("home",{page:"category",user,cates,cate,p});
+        res.render("home",{page:"category",user,cates,products,category});
     }  
 })
 

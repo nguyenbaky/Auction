@@ -20,32 +20,35 @@ router.get("/profile/:userID",async function(req,res){
     var comments = await Comments.find({name:user.username})
     res.render("home",{page:"profile",user,cates,comments});
 })
-
-router.post("/profile/:userID",async function(req,res) {
+// update profile 
+router.put("/profile/:userID",async function(req,res) {
     var id = req.params.userID
     if(res.locals.id !== id) return res.redirect("/profile/"+res.locals.id)
-    var {username,ho_ten,email,dia_chi} = req.body    
-    await Users.findOne({_id:id},function (err,user) {
-        if(err) return res.send(err)
-        else {
-            Users.findOne({username},function (err,user) {
-                if(user) return res.send("Username đã tồn tại")
-                else {
-                    Users.findOne({email},function (err,u) {
-                        if(u) return res.send("Email đã tồn tại")
-                        else {
-                            Users.findOneAndUpdate({_id:id},
-                                {username,ho_ten,email,dia_chi},
-                                function(err,u){
-                                    if(err) return res.send(err)
-                                    else return res.send("Update thành công")
-                            })
-                        }
-                    })
-                }                
-            })
-        }        
+    var {username,ho_ten,email,dia_chi,password} = req.body  
+
+    var user =  await Users.findOne({_id:id})
+    bcrypt.hash(password,saltRounds,function(err,hash){
+        password = hash
     })
+    if(user.password !== password) return res.send("Password not corrected !!")
+    else{
+        var [u1,u2] = await Promise.all([
+            Users.findOne({username: user.username}),
+            Users.findOne({email: user.email})
+        ]) 
+        if(u1 !== null || u2 !== null){
+            if(u1 !== null) return res.send("Username đã tồn tại")
+            else return res.send("Email đã tồn tại")
+        }else{
+            await Users.findOneAndUpdate(
+                { _id : id },
+                {username,ho_ten,email,dia_chi},
+                function(err,u){
+                    if(err) return res.send(err)
+                    else return res.send("Update thành công")
+            })
+        }
+    }
 })
 
 router.put("/change_password/:userID",async function(req,res){
@@ -61,7 +64,7 @@ router.put("/change_password/:userID",async function(req,res){
     })
 
     await Users.findOneAndUpdate({_id:id,password:oldpassword},{password},function(err,user){
-        if(err) return res.send(err)
+        if(err) return res.send("Password not correct !!")
         else return res.send("Đổi password thành công")
     })
 })
@@ -81,7 +84,7 @@ router.put("/favorite/:userID",async function(req,res){
     var _id = req.params.userID
     var {product_id} = req.body
     var user = await Users.findOne({_id})
-    if(user.sp_Yeu_Thich.indexOf(product_id) !== -1) return res.send("sp đã yêu thích")
+    if(user.sp_Yeu_Thich.indexOf(product_id) !== -1) return res.send("Đã thích !!")
     else{
         await Users.findOneAndUpdate({
             _id,

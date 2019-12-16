@@ -108,7 +108,7 @@ app.get("/login",function(req,res){
     res.render("login",{page:"login"});
 })
 
-app.post("/login",function(req,res){
+app.post("/login",async function(req,res){
     Users.findOne({email:req.body.email}).then(function(user){
         if(user){
             // check user

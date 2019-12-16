@@ -5,7 +5,8 @@ $( document ).ready(function() {
         data.ho_ten = $("#name").text()
         data.email = $("#email").text()
         data.dia_chi = $("#address").text()
-        if(data.username === "" || data.ho_ten === "" || data.email === "" || data.dia_chi === ""){
+        data.password = $("$password").text()
+        if(data.username === "" || data.ho_ten === "" || data.email === "" || data.dia_chi === "" || data.password === ""){
             alert("Nhập đủ thông tin")
             return
         }  

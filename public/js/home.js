@@ -59,7 +59,7 @@ $( document ).ready(function() {
             contentType: 'application/json',
             url: '/favorite/'+id,						
             success: function(data) {
-                console.log(data)                   
+                alert(data)                   
             }
         })         
     })

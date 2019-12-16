@@ -1,4 +1,32 @@
-<h1>Category</h1>
+<h1><%- category.name %></h1>
+
+<div class="row" style="padding: 20px;">
+    <% products.forEach(function(p,index){ %>    
+      <div class="col-sm-3 mb-3">
+        <div class="card h-100">
+          <img src="upload/<%- p.images[0] %>" alt="ProName" title="ProName" class="card-img-top">
+          <div class="card-body">
+            <h6 class="card-title" style="text-align: center;"><%- p.name %></h6>
+            <h5 class="card-title text-danger" style="text-align: center;"><%- p.Gia_Hien_Tai %></h5>
+          </div>
+          <div class="card-footer text-center">
+            <a class="btn btn-sm btn-outline-primary" href="/chi-tiet-san-pham/<%- p._id %>" role="button">
+              <i class="fa fa-eye" aria-hidden="true"></i>
+              Details
+            </a>  
+            <% if(typeof user !== "undefined"){ %>
+              <div id="id" style="display: none;"><%- user._id %></div>
+              <div id="product_id" style="display: none;"><%- p._id %></div>
+            <%  } %>
+            <a class="btn btn-sm btn-outline-danger favorite" href="#" role="button">
+                <i class="fa fa-heart" aria-hidden="true"></i>
+                Add to favorite
+              </a>        
+          </div>
+        </div>
+      </div>
+    <% }) %>
+</div>
 
 
 
