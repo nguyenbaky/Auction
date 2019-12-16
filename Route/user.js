@@ -76,6 +76,25 @@ router.get("/favorite/:userID",async function(req,res){
     ])
     res.render("home",{page:"favorite",user,cates});
 })
+
+router.put("/favorite/:userID",async function(req,res){
+    var _id = req.params.userID
+    var {product_id} = req.body
+    var user = await Users.findOne({_id})
+    if(user.sp_Yeu_Thich.indexOf(product_id) !== -1) return res.send("sp đã yêu thích")
+    else{
+        await Users.findOneAndUpdate({
+            _id,
+            $push: {sp_Yeu_Thich: product_id},
+            function(err){
+                if(err) return res.send(err)
+                else return res.send("Đã thêm vào yêu thích !!")
+            }
+        })
+    }
+    
+})
+
 // update level
 router.put("/request/:userID",async function(req,res) {
     var id = req.params.userID

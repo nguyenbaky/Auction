@@ -39,7 +39,7 @@ $( document ).ready(function() {
             type: 'PUT',
             data: JSON.stringify(data),
             contentType: 'application/json',
-            url: 'request/' + id,						
+            url: '/request/' + id,						
             success: function(data) {
                 if(data === "Thành công")  {
                     location.reload()
@@ -49,8 +49,19 @@ $( document ).ready(function() {
     })
 
     $('.favorite').click(function(e){
-        e.preventDefault();
-        
+        e.preventDefault(); 
+        var data = {}
+        data.product_id = $("#product_id").text()
+        var id = $("#id").text()
+        $.ajax({
+            type: 'PUT',
+            data: JSON.stringify(data),
+            contentType: 'application/json',
+            url: '/favorite/'+id,						
+            success: function(data) {
+                console.log(data)                   
+            }
+        })         
     })
 
     $('.buy').click(function (e) {
@@ -88,15 +99,15 @@ $( document ).ready(function() {
        data.point = point
 
        $.ajax({
-        type: 'POST',
-        data: JSON.stringify(data),
-        contentType: 'application/json',
-        url: '/comment',						
-        success: function(data) {
-            console.log(data)                   
-        }
-    });
-   })
+            type: 'POST',
+            data: JSON.stringify(data),
+            contentType: 'application/json',
+            url: '/comment',						
+            success: function(data) {
+                console.log(data)                   
+            }
+        });
+    })
 }); 
 
 function increaseValue(buoc_gia) {

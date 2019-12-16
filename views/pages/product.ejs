@@ -13,9 +13,15 @@
             <a class="btn btn-sm btn-outline-primary" href="/chi-tiet-san-pham/<%- p._id %>" role="button">
               <i class="fa fa-eye" aria-hidden="true"></i>
               Details
-            </a>          
+            </a>  
+            <div id="id" style="display: none;"><%- user._id %></div>
+            <div id="product_id" style="display: none;"><%- p._id %></div>
+            <a class="btn btn-sm btn-outline-danger favorite" href="#" role="button">
+                <i class="fa fa-heart" aria-hidden="true"></i>
+                Add to favorite
+              </a>        
           </div>
         </div>
       </div>
     <% }) %>
-  </div>
+</div>
