@@ -7,11 +7,9 @@ const Products = require("../models/product")
 const Categories = require("../models/category")
 
 router.get("/",async function(req,res){ 
-    var day = new Date();
-    var y =day.getFullYear()
-    var m = day.getMonth() + 1
-    var d = day.getDate() 
-    var n = y+"-"+m+"-"+d
+    var d = new Date();
+    var n = moment(d).format('YYYY-MM-DD h:m:s')
+
     var {level} = res.locals;
     var [cates,P_Highest,P_Old,P_Hot] = await Promise.all([
         Cates.find({}),
@@ -31,11 +29,14 @@ router.get("/",async function(req,res){
 
 router.get("/category/:cateID",async function(req,res){
     var {level} = res.locals;
+
     var [cates,cate]= await Promise.all([
         Cates.find({}),
         Cates.findOne({_id:req.params.cateID})
     ])
+
     var categories = await Categories.find({_id: {$in : cate.categoryID}})
+
     if(level === 0){
         res.render("home",{page:"cate",cates,cate,categories})
     }else{
@@ -48,11 +49,19 @@ router.get("/category/:cateID",async function(req,res){
 // view category
 router.get("/category/:cateID/:categoryID",async function(req,res){
     var {level} = res.locals;  
+
+    var d = new Date();
+    var n = moment(d).format('YYYY-MM-DD h:m:s')
+
     var [cates,category]= await Promise.all([
         Cates.find({}),
         Categories.findOne({_id:req.params.categoryID})
     ]) 
-    var products = await Products.find({_id: {$in: category.productID}})
+
+    var products = await Products.find({
+        _id      : {$in: category.productID},
+        date_end : {$gt:n}
+    })
 
     if(level === 0){
         res.render("home",{page:"category",cates,products,category});
@@ -66,10 +75,12 @@ router.get("/category/:cateID/:categoryID",async function(req,res){
 // /chi-tiet-san-pham/:id_product
 router.get("/chi-tiet-san-pham/:productID",async function(req,res){
     var {level} = res.locals;
+
     var [cates,p] = await Promise.all([
         Cates.find({}),
         Products.findOne({_id:req.params.productID})
     ])
+    
     if(level === 0){
         res.render("home",{page:"product_detail",cates,p});
     }else{      

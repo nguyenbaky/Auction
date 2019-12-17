@@ -57,6 +57,7 @@ router.get("/request",async function(req,res){
 
 router.post("/request",async function (req,res) {
     var {username,option} = req.body
+    
     if(option === 1){
         await Users.findOneAndUpdate(
             {username},
@@ -86,9 +87,11 @@ router.get("/category",async function(req,res){
 //// add cateogory 1
 router.post("/cate",async function(req,res){
     var {name} = req.body;
+
     var c = new Cate({
         name,
     })
+
     await Cate.findOne({name},function (err,cate) {
         if(cate){
             return res.send("Category đã tồn tại !!!");

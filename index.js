@@ -163,48 +163,41 @@ app.get("/signup",function(req,res){
     res.render("login",{page:"signup"});
 })
 
-app.post("/signup",function(req,res){
-    Users.findOne({username:req.body.username}).then(function(user){
-        if(user){
-            return res.render("signup",{page:"signup",message:"Username already exists !!!"});
-        }else{
-            Users.findOne({email:req.body.email}).then(function(user){
-                if(user){   
-                    return res.render("login",{page:"signup",message:"email used !!!"});
+app.post("/signup",async function(req,res){
+    var [u1,u2,a] = await Promise.all([
+        Users.findOne({username:req.body.username}),
+        Users.findOne({email:req.body.email}),
+        admin.findOne({email:req.body.email})
+    ])
+
+    if(u1 !== null || u2 !== null || a != null){
+        if(u2 !== null || a !== null) return res.render("login",{page:"signup",message:"email used !!!"});
+        else return res.render("signup",{page:"signup",message:"Username already exists !!!"});
+    }else{
+        bcrypt.hash(req.body.pass, saltRounds, function(err, hash) {
+            var u = new User({
+                ho_ten        : req.body.name,
+                username      : req.body.username,
+                email         : req.body.email,
+                password      : hash,
+                dia_chi       : req.body.address,
+                diem_danh_gia : 0,
+                level         : 1,
+                is_update     : 0 ,
+                n_danh_gia    : 0
+            })
+            u.save(function(err){
+                if(err){
+                    console.log(err);
+                    return res.status(500).send(err)
                 }
-                else{
-                    admin.findOne({email:req.body.email}).then(function(admin){
-                        if(admin){       
-                            return res.render("signup",{page:"signup",message:"email used !!!"});
-                        }
-                        else{
-                            bcrypt.hash(req.body.pass, saltRounds, function(err, hash) {
-                                var u = new User({
-                                    ho_ten        : req.body.name,
-                                    username      : req.body.username,
-                                    email         : req.body.email,
-                                    password      : hash,
-                                    dia_chi       : req.body.address,
-                                    diem_danh_gia : 0,
-                                    level         : 1,
-                                    is_update     : 0 ,
-                                    n_danh_gia    : 0
-                                })
-                                u.save(function(err){
-                                    if(err){
-                                        console.log(err);
-                                    }
-                                    else{          
-                                        return res.redirect("/");
-                                    }
-                                })
-                            });
-                        }
-                    })
+                else{          
+                    return res.redirect("/");
                 }
             })
-        }
-    })
+        });
+    }
+
 })
 
 app.get("/forgot",function(req,res){

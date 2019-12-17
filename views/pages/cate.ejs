@@ -1,6 +1,6 @@
 <h1>Category <%- cate.name %> </h1>
 <% categories.forEach(function(category,index){ %>
-    <div style="padding: 20px;">
-        <a href="/category/<%- cate._id %>/<%- category._id %>"><%- category.name  %></a>
+    <div style="padding: 40px;display: inline;">
+        <a href="/category/<%- cate._id %>/<%- category._id %>" class="btn btn-secondary"><%- category.name  %></a>
     </div>
 <% })  %> 

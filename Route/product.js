@@ -39,12 +39,7 @@ router.get("/:sellerID",async function(req,res){
     if(res.locals.id !== id) return res.redirect("/product/"+res.locals.id) 
 
     var d = new Date();
-    var y = d.getFullYear()
-    var m = d.getMonth() + 1
-    var day = d.getDate() 
-    var h = d.getHours()
-    var mi = d.getMinutes()
-    var n = y+"-"+m+"-"+day+" "+h+":"+mi
+    var n = moment(d).format('YYYY-MM-DD h:m:s')
     
     var [user,cates] = await Promise.all([
         Users.findOne({_id:res.locals.id}),
@@ -60,24 +55,29 @@ router.get("/:sellerID",async function(req,res){
 // Hiện thông tin sản phẩm đã bán
 router.get("/sold/:sellerID",async function(req,res){
     var id = req.params.sellerID
-    var d = new Date();
-    var n = d.toISOString();
     if(res.locals.id !== id) return res.redirect("/product/sold/"+res.locals.id)    
-    var [user,cates,products] = await Promise.all([
+
+    var d = new Date();
+    var n = moment(d).format('YYYY-MM-DD h:m:s')
+
+    var [user,cates] = await Promise.all([
         Users.findOne({_id:res.locals.id}),
-        Cates.find({}),
-        Products.find({
-            Seller:req.params.sellerID,
-            date_end:{$gt:n}
-        })
-    ])  
+        Cates.find({}), 
+    ])
+    
+    var products = await Products.find({
+        Seller      : user.username,
+        date_end    : {$lt:n}
+    })
+
     res.render("home",{page:"sold_product",user,cates,products});
 })
 
-// Thêm sản phẩm bán
+// Thêm sản phẩm đang bán
 router.get("/add/:sellerID",async function(req,res){
     var id = req.params.sellerID
     if(res.locals.id !== id) return res.redirect("/product/add/"+res.locals.id) 
+    
     var [user,cates] = await Promise.all([
         Users.findOne({_id:res.locals.id}),
         Cates.find({}),

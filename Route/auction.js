@@ -1,21 +1,18 @@
 var express = require('express')
 var router = express.Router()
+var moment = require("moment")
+
 const Users = require("../models/User")
 const Cates = require("../models/cate")
 const Product = require("../models/product")
 //  /auction
-// auction/:user :Danh sách sản phẩm đau giá 
+// auction/:user :Danh sách sản phẩm đang đấu giá 
 router.get("/:userID",async function(req,res){
     var id = req.params.userID
     if(res.locals.id !== id) return res.redirect("/auction/"+res.locals.id)
 
     var d = new Date();
-    var y = d.getFullYear()
-    var m = d.getMonth() + 1
-    var day = d.getDate() 
-    var h = d.getHours()
-    var mi = d.getMinutes()
-    var n = y+"-"+m+"-"+day+" "+h+":"+mi
+    var n = moment(d).format('YYYY-MM-DD h:m:s')
 
     var [user,cates] = await Promise.all([
         Users.findOne({_id:res.locals.id}),
@@ -34,12 +31,7 @@ router.get("/success/:userID",async function(req,res){
     if(res.locals.id !== id) return res.redirect("/auction/success"+res.locals.id)
 
     var d = new Date();
-    var y = d.getFullYear()
-    var m = d.getMonth() + 1
-    var day = d.getDate() 
-    var h = d.getHours()
-    var mi = d.getMinutes()
-    var n = y+"-"+m+"-"+day+" "+h+":"+mi
+    var n = moment(d).format('YYYY-MM-DD h:m:s')
 
     var [user,cates] = await Promise.all([
         Users.findOne({_id:res.locals.id}),
@@ -47,8 +39,16 @@ router.get("/success/:userID",async function(req,res){
     ])
     var products = await Product.find({
         _id      : {$in : sp_Dau_Gia },
-        date_end : {$lt : n}
+        date_end : {$lt : n},
     })
+    // Xóa các sản phẩm đấu giá không thành công trong danh sách
+    if(products !== null){
+        products.forEach(function(p,index){
+            if(p.Bidder[p.Bidder.length - 1] !== user.username){
+                products.splice(index,1)
+            }
+        })
+    }    
     res.render("home",{page:"success",user,cates,products});
 })
 
