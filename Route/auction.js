@@ -52,5 +52,18 @@ router.get("/success/:userID",async function(req,res){
     res.render("home",{page:"success",user,cates,products});
 })
 
+router.post("/:userID",async function(req,res){
+    var id = req.params.userID
+    if(res.locals.id !== id) return res.redirect("/auction/"+res.locals.id)
+
+    var {product_id} = req.body
+    await Users.findOneAndUpdate(
+        {_id:id},
+        {$push: {sp_Dau_Gia: product_id}},
+        function(err){
+            if(err) return res.send(err)
+            else return res.send("Đã đấu giá sản phẩm !!!")
+        })
+})
 
 module.exports = router

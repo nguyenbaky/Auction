@@ -29,7 +29,7 @@ $( document ).ready(function() {
         $("#score").fadeIn();
         $("#score-tab").addClass("active");
     })
-
+    // Upgrade account
     $('#upgrade').click(function (e) {
         var data = {}
         var id = $("#id").text()
@@ -47,7 +47,7 @@ $( document ).ready(function() {
             }
         });
     })
-
+    // Thêm vào yêu thích
     $('.favorite').click(function(e){
         e.preventDefault(); 
         var data = {}
@@ -63,7 +63,7 @@ $( document ).ready(function() {
             }
         })         
     })
-
+    // Đấu giá
     $('.buy').click(function (e) {
         e.preventDefault();
         if($("#user").text() === ""){
@@ -71,8 +71,22 @@ $( document ).ready(function() {
             alert("You have to loggin first to bid !!")       
             return
         }
-    })
+        var data = {}
+        data.product_id = $("#product_id").text()
+        var id = $("#id").text()
+        
+        $.ajax({
+            type: 'POST',
+            data: JSON.stringify(data),
+            contentType: 'application/json',
+            url: '/auction/' + id,						
+            success: function(data) {
+                alert(data)                 
+            }
+        });
 
+    })
+    // Đánh giá người bán
     $("#up").click(function (e) {
         if($("#user").text() === ""){
             $(this).removeAttr('data-target');
@@ -90,7 +104,7 @@ $( document ).ready(function() {
         }
         point = -1
     })
-
+    // Gửi nhận xét người bán
    $('.send').click(function (e) {
        var data = {}
        data.sender = $("#user").text()

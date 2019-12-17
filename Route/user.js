@@ -91,6 +91,8 @@ router.get("/favorite/:userID",async function(req,res){
 
 router.put("/favorite/:userID",async function(req,res){
     var _id = req.params.userID
+    if(res.locals.id !== _id) return res.redirect("/favorite/"+res.locals.id)
+    
     var {product_id} = req.body
 
     var user = await Users.findOne({_id})
