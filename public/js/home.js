@@ -63,7 +63,7 @@ $( document ).ready(function() {
             }
         })         
     })
-    // Đấu giá
+    // event click button Đấu giá
     $('.buy').click(function (e) {
         e.preventDefault();
         if($("#user").text() === ""){
@@ -71,20 +71,6 @@ $( document ).ready(function() {
             alert("You have to loggin first to bid !!")       
             return
         }
-        var data = {}
-        data.product_id = $("#product_id").text()
-        var id = $("#id").text()
-        
-        $.ajax({
-            type: 'POST',
-            data: JSON.stringify(data),
-            contentType: 'application/json',
-            url: '/auction/' + id,						
-            success: function(data) {
-                alert(data)                 
-            }
-        });
-
     })
     // Đánh giá người bán
     $("#up").click(function (e) {
@@ -137,9 +123,9 @@ function decreaseValue(gia_hien_tai,buoc_gia) {
     document.getElementById('number').value = value;
 }
 
-function bid(gia_hien_tai) {
+function bid(gia_hien_tai,buoc_gia) {
     var value = parseInt(document.getElementById('number').value, 10);
-    if(value < gia_hien_tai) {
+    if(value < gia_hien_tai + buoc_gia) {
         alert("Bước giá thấp hơn qui định")
         return
     }
@@ -149,14 +135,15 @@ function bid(gia_hien_tai) {
     var day = d.getDate() 
     var h = d.getHours()
     var mi = d.getMinutes()
-    var n = y+"-"+m+"-"+day+" "+h+":"+mi
+    var s = d.getSeconds()
+    var n = y+"-"+m+"-"+day+" "+h+":"+mi+":"+s
 
     var data = {}
     var url = window.location.pathname.split("/")
     var id = url[2]
   
     data.Gia_Hien_Tai = value
-    data.bidder = document.getElementById("bidder").textContent;
+    data.bidder = $("#user").text();
     data.thoi_diem = n
 
     $.ajax({
@@ -165,8 +152,21 @@ function bid(gia_hien_tai) {
         contentType: 'application/json',
         url: '/product/'+id,						
         success: function(data) {
-            alert(data);    
-            location.reload();                    
+            alert(data);                      
+        }
+    });
+
+    var data = {}
+    data.product_id = $("#product_id").text()
+    var id = $("#id").text()
+
+    $.ajax({
+        type: 'POST',
+        data: JSON.stringify(data),
+        contentType: 'application/json',
+        url: '/auction/' + id,						
+        success: function(data) {
+            console.log(data)                 
         }
     });
 }

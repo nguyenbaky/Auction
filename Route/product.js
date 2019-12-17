@@ -165,7 +165,7 @@ router.put("/:productID",async function (req,res) {
         $push:{Bid_price: Gia_Hien_Tai,Bidder: bidder, thoi_diem:thoi_diem}},
         function(err){
             if(err) return res.send(err)
-            else return res.send("Đấu giá thành công !!")
+            else return res.send("Đã đấu giá sản phẩm !!")
         })
 })
 
