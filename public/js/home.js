@@ -159,7 +159,10 @@ function bid(gia_hien_tai,buoc_gia) {
         contentType: 'application/json',
         url: '/product/'+id,						
         success: function(data) {
-            alert(data);                      
+            alert(data);         
+            if(data === "Giá không hợp lệ !!!"){
+                window.reload()
+            }             
         }
     });
 
