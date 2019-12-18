@@ -50,9 +50,9 @@
         </div>
         <!-- Category -->
         <div class="form-row">
-            <label for="category">Danh mục</label>
+            <label for="category">Thể loại</label>
             <select class="form-control" id="category" name="selectCate">
-                <% cates.forEach(function(cate,index){ %>
+                <% categories.forEach(function(cate,index){ %>
                     <option value="<%- cate._id %>"><%- cate.name %></option>
                 <% }) %> 
             </select>

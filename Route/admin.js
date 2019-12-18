@@ -1,5 +1,6 @@
 var express = require('express')
 var router = express.Router()
+var moment = require("moment")
 
 const Cate = require("../models/cate");
 const Category = require("../models/category")
@@ -237,13 +238,16 @@ router.delete("/category/:cate_id",async function(req,res){
 
 /// product
 router.get("/product/:category_id",async function(req,res){
-    var date = new Date()
+    var d = new Date();
+    var n = moment(d).format('YYYY-MM-DD h:m:s')
+
     var {category_id} = req.params  // id category
     await Category.findOne({_id:category_id},function(err,category){
         if(category){
             var name = category.name
             Products.find({
-                _id: {$in : category.productID},
+                _id         : {$in : category.productID},
+                date_end    : {$lt:n}
             },function(err,products){
                 Cate.find({},function(err,cates){
                     return res.render("admin",{page:"Product",products,cates,name})

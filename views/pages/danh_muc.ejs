@@ -1,0 +1,10 @@
+<div class="form-row" style="padding: 20px;">
+    <label for="category">Chọn danh mục sản phẩm</label>
+    <div style="display: none;" id="id">user._id</div>
+    <select class="form-control" id="cate" name="selectCate">
+        <% cates.forEach(function(cate,index){ %>
+            <option value="<%- cate._id %>"><%- cate.name %></option>
+        <% }) %> 
+    </select>
+    <button style="margin: 15px;float: right;"class="btn btn-primary" id="btn_danh_muc">OK</button>
+</div>

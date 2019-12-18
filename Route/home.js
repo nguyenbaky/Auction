@@ -1,5 +1,6 @@
 var express = require('express')
 var router = express.Router()
+var moment = require("moment")
 
 const Users = require("../models/User")
 const Cates = require("../models/cate")
@@ -80,12 +81,13 @@ router.get("/chi-tiet-san-pham/:productID",async function(req,res){
         Cates.find({}),
         Products.findOne({_id:req.params.productID})
     ])
-    
+    var isEmpty = p.thoi_diem.length === 0 ? 1 : 0
+
     if(level === 0){
-        res.render("home",{page:"product_detail",cates,p});
+        res.render("home",{page:"product_detail",cates,p,isEmpty});
     }else{      
         var user = await Users.findOne({_id:res.locals.id})       
-        res.render("home",{page:"product_detail",user,cates,p});
+        res.render("home",{page:"product_detail",user,cates,p,isEmpty});
     }  
 })
 

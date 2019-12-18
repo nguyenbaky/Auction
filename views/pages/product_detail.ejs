@@ -68,13 +68,15 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <% for(i = 0;i < p.thoi_diem.length; i++){ %> 
-                        <tr>
-                            <td><%- p.thoi_diem[i] %></td>
-                            <td><%- p.Bidder[i] %></td>
-                            <td><%- p.Bid_price[i] %></td>
-                        </tr>
-                    <% } %>
+                    <%  if(!isEmpty){
+                        <% for(i = p.thoi_diem.length - 1;i >= 0; i--){ %> 
+                            <tr>
+                                <td><%- p.thoi_diem[i] %></td>
+                                <td><%- p.Bidder[i] %></td>
+                                <td><%- p.Bid_price[i] %></td>
+                            </tr>
+                        <% } %>
+                    } %>
                 </tbody>
             </table>
         </div>

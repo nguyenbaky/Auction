@@ -108,6 +108,13 @@ $( document ).ready(function() {
             }
         });
     })
+
+    $('#btn_danh_muc').click(function (e) {
+        var cate_id = $("#cate").val()
+        var id = $("#id").text()
+        var url = "http://localhost:8000/product/add/"+cate_id+"/"+id
+        window.location.replace(url)
+    })
 }); 
 
 function increaseValue(buoc_gia) {

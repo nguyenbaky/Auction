@@ -5,7 +5,7 @@ var moment = require("moment")
 const Users = require("../models/User")
 const Cates = require("../models/cate")
 const Products = require("../models/product")
-const Categorys = require("../models/category")
+const Categories = require("../models/category")
 
 const multer = require("multer");
 var storage = multer.diskStorage({
@@ -73,16 +73,30 @@ router.get("/sold/:sellerID",async function(req,res){
     res.render("home",{page:"sold_product",user,cates,products});
 })
 
-// Thêm sản phẩm đang bán
-router.get("/add/:sellerID",async function(req,res){
+router.get("/danh_muc/:sellerID",async function(req,res){
     var id = req.params.sellerID
-    if(res.locals.id !== id) return res.redirect("/product/add/"+res.locals.id) 
-    
+    if(res.locals.id !== id) return res.redirect("/product/danh_muc/"+res.locals.id) 
+
     var [user,cates] = await Promise.all([
         Users.findOne({_id:res.locals.id}),
         Cates.find({}),
+    ]) 
+
+    res.render("home",{page:"danh_muc",user,cates})
+})
+
+// Thêm sản phẩm đang bán
+router.get("/add/:cateID/:sellerID",async function(req,res){
+    var id = req.params.sellerID
+    var cate_id = req.params.cateID
+    if(res.locals.id !== id) return res.redirect("/product/add/"+res.locals.id) 
+    
+    var [user,cate] = await Promise.all([
+        Users.findOne({_id:res.locals.id}),
+        Cates.findOne({_id:cate_id}),
     ])        
-    res.render("pages/add_product",{page:"add_product",user,cates});
+    var categories = await Categories.find({ _id: {$in: cate.categoryID} })
+    res.render("pages/add_product",{page:"add_product",user,categories});
 })
 
 router.post("/add/:sellerID",async function(req,res){    
@@ -123,7 +137,7 @@ router.post("/add/:sellerID",async function(req,res){
 
             console.log("saved")
             // Thêm sp vào cate
-            Categorys.findOneAndUpdate(
+            Categories.findOneAndUpdate(
                 {_id:req.body.selectCate},
                 {$push : {productID: p._id}},
                 function(err){
@@ -159,14 +173,19 @@ router.post("/add/:sellerID",async function(req,res){
 router.put("/:productID",async function (req,res) {
     var id = req.params.productID
     var {Gia_Hien_Tai,bidder,thoi_diem} = req.body
-    await Products.findOneAndUpdate(
-        {_id:id},
-        {Num_bid: Num_bid+1, Gia_Hien_Tai, 
-        $push:{Bid_price: Gia_Hien_Tai,Bidder: bidder, thoi_diem:thoi_diem}},
-        function(err){
-            if(err) return res.send(err)
-            else return res.send("Đã đấu giá sản phẩm !!")
-        })
+    var product = await Products.findOne({_id:id})
+    if(product.Gia_Hien_Tai + product.Buoc_gia > Gia_Hien_Tai){
+        return res.send("Giá không hợp lệ !!!")
+    }else{
+        await Products.findOneAndUpdate(
+            {_id:id},
+            {Num_bid: Num_bid+1, Gia_Hien_Tai, 
+            $push:{Bid_price: Gia_Hien_Tai,Bidder: bidder, thoi_diem:thoi_diem}},
+            function(err){
+                if(err) return res.send(err)
+                else return res.send("Đã đấu giá sản phẩm !!")
+            })
+    }    
 })
 
 module.exports = router
