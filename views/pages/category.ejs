@@ -28,38 +28,76 @@
     <% }) %>
 </div>
 
-
-
+<div><%- currentPage %></div>
 
 <!-- PAGINATION -->
 <div class="category-pagination" style="padding: 20px;">
 
+  <div class="pagination" align="center" style="width: 100px;height: 40px;border: black; border-style: ridge;
+    border-width: 1px; box-shadow: 2px 2px 5px grey;
+    background-color: #F4F4F4;display: inline-block;">
+    <a href="/category/<%- cateID %>/<%- categoryID %>/1" style="text-align: center;color: black;"><span class="arrow"><<</span> Đầu</a>
+    </div>
+  <!-- Page 1 -->
+  <% if (currentPage == 1) { %> 
+    <div class="pagination active_category" align="center" style="width: 40px;height: 40px;border: black; border-style: ridge;
+        border-width: 1px; box-shadow: 2px 2px 5px grey;
+        background-color: #F4F4F4;display: inline-block;">
+      <a href="/category/<%- cateID %>/<%- categoryID %>/1" style="text-align: center;color: black;">1</a>
+    </div>
+  <% }else{ %>
+    <div class="pagination" align="center" style="width: 40px;height: 40px;border: black; border-style: ridge;
+        border-width: 1px; box-shadow: 2px 2px 5px grey;
+        background-color: #F4F4F4;display: inline-block;">
+      <a href="/category/<%- cateID %>/<%- categoryID %>/1" style="text-align: center;color: black;">1</a>
+    </div>
+  <% } %>
+  <!-- Prev Page -->
+  <% if( currentPage > 2 && pages > 2){ %>
+    <div class="pagination" align="center" style="width: 40px;height: 40px;border: black; border-style: ridge;
+        border-width: 1px; box-shadow: 2px 2px 5px grey;
+        background-color: #F4F4F4;display: inline-block;">
+    <a href="/category/<%- cateID %>/<%- categoryID %>/<%- currentPage - 1 %>" style="text-align: center;color: black;"><%- currentPage - 1 %></a>
+    </div>
+  <% } %>
+    <!-- Current Page -->
+  <% if (currentPage > 1 && currentPage < pages){ %>
+    <div class="pagination active_category" align="center" style="width: 40px;height: 40px;border: black; border-style: ridge;
+        border-width: 1px; box-shadow: 2px 2px 5px grey;
+        background-color: #F4F4F4;display: inline-block;">
+    <a href="/category/<%- cateID %>/<%- categoryID %>/<%- currentPage %>" style="text-align: center;color: black;"><%- currentPage %></a>
+    </div>
+  <% } %>
+
+  <!-- Next Page -->
+  <% if (currentPage + 1 < pages){ %>
+    <div class="pagination active_category" align="center" style="width: 40px;height: 40px;border: black; border-style: ridge;
+        border-width: 1px; box-shadow: 2px 2px 5px grey;
+        background-color: #F4F4F4;display: inline-block;">
+    <a href="/category/<%- cateID %>/<%- categoryID %>/<%- currentPage + 1 %>" style="text-align: center;color: black;"><%- currentPage + 1 %></a>
+    </div>
+  <% } %>
+  
+  <!-- Cuối -->
+  <% if(pages > 1 && currentPage == pages){ %>
+      <div class="pagination active_category" align="center" style="width: 40px;height: 40px;border: black; border-style: ridge;
+        border-width: 1px; box-shadow: 2px 2px 5px grey;
+        background-color: #F4F4F4;display: inline-block;">
+        <a href="/category/<%- cateID %>/<%- categoryID %>/<%- pages %>" style="text-align: center;color: black;"><%- pages %></a>
+      </div>
+  <% } %>  
+  <% if(pages > 1 && currentPage < pages){ %>
+    <div class="pagination active_category" align="center" style="width: 40px;height: 40px;border: black; border-style: ridge;
+      border-width: 1px; box-shadow: 2px 2px 5px grey;
+      background-color: #F4F4F4;display: inline-block;">
+      <a href="/category/<%- cateID %>/<%- categoryID %>/<%- pages %>" style="text-align: center;color: black;"><%- pages %></a>
+    </div>
+  <% } %>  
+
     <div class="pagination" align="center" style="width: 100px;height: 40px;border: black; border-style: ridge;
     border-width: 1px; box-shadow: 2px 2px 5px grey;
     background-color: #F4F4F4;display: inline-block;">
-    <a href="" style="text-align: center;color: black;"><span class="arrow"><<</span> Đầu</a>
-    </div>
-
-    <div class="pagination active_category" align="center" style="width: 40px;height: 40px;border: black; border-style: ridge;
-    border-width: 1px; box-shadow: 2px 2px 5px grey;
-    background-color: #F4F4F4;display: inline-block;">
-    <a href="" style="text-align: center;color: black;">1</a>
-    </div>
-    <div class="pagination" align="center" style="width: 40px;height: 40px;border: black; border-style: ridge;
-        border-width: 1px; box-shadow: 2px 2px 5px grey;
-        background-color: #F4F4F4;display: inline-block;">
-        <a href="" style="text-align: center;color: black;">2</a>
-    </div>
-    <div class="pagination" align="center" style="width: 40px;height: 40px;border: black; border-style: ridge;
-        border-width: 1px; box-shadow: 2px 2px 5px grey;
-        background-color: #F4F4F4;display: inline-block;">
-        <a href="" style="text-align: center;color: black;">3</a>
-    </div>
-
-    <div class="pagination " align="center" style="width: 100px;height: 40px;border: black; border-style: ridge;
-    border-width: 1px; box-shadow: 2px 2px 5px grey;
-    background-color: #F4F4F4;display: inline-block;">
-    <a href="" style="text-align: center;color: black;">Cuối <span class="arrow">>></span></a>
+    <a href="/category/<%- cateID %>/<%- categoryID %>/<%- pages %>" style="text-align: center;color: black;">Cuối <span class="arrow">>></span></a>
     </div>
 
 </div>

@@ -48,9 +48,10 @@ router.get("/category/:cateID",async function(req,res){
 })
 
 // view category
-router.get("/category/:cateID/:categoryID",async function(req,res){
+router.get("/category/:cateID/:categoryID/:page",async function(req,res){
     var {level} = res.locals;  
-
+    var {cateID,categoryID,page} = req.params
+    var resPerPage = 4
     var d = new Date();
     var n = moment(d).format('YYYY-MM-DD h:m:s')
 
@@ -59,18 +60,51 @@ router.get("/category/:cateID/:categoryID",async function(req,res){
         Categories.findOne({_id:req.params.categoryID})
     ]) 
 
-    var products = await Products.find({
-        _id      : {$in: category.productID},
-        date_end : {$gt:n}
-    })
+    var [p,products] = await Promise.all([
+        Products.find({
+            _id      : {$in: category.productID},
+            date_end : {$gt:n}
+        }),
+        Products.find({
+            _id      : {$in: category.productID},
+            date_end : {$gt:n}
+        }).skip((resPerPage * page) - resPerPage)
+        .limit(resPerPage)
+    ])
+    // total page 
+    var pages = Math.ceil(p.length / resPerPage)
 
-    if(level === 0){
-        res.render("home",{page:"category",cates,products,category});
-    }
+    if(page > pages)  res.redirect("/category/"+cateID+"/"+categoryID+"/"+pages)
+    else if(page < 1)  res.redirect("/category/"+cateID+"/"+categoryID+"/1")
     else{
-        var user = await Users.findOne({_id:res.locals.id})
-        res.render("home",{page:"category",user,cates,products,category});
-    }  
+        if(level === 0){
+            res.render("home",{
+                page:"category",
+                cates,
+                products,
+                category,
+                currentPage : page,
+                pages,
+                cateID,
+                categoryID
+             });
+        }
+        else{
+            var user = await Users.findOne({_id:res.locals.id})
+            res.render("home",{
+                page:"category",
+                user,
+                cates,
+                products,
+                category,
+                currentPage  : page,
+                pages        : Math.ceil(products.length / resPerPage),
+                cateID,
+                categoryID 
+            });
+        } 
+    }
+     
 })
 
 // /chi-tiet-san-pham/:id_product

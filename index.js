@@ -40,12 +40,9 @@ var home = require('./Route/home')
 var auction = require('./Route/auction')
 var users = require('./Route/user')
 
-//multer
-var multer  = require('multer');
-const Cates = require("./models/cate");
 const Users = require("./models/User");
 const Products = require("./models/product");
-const cate = require("./models/cate");
+const Cates = require("./models/cate");
 const admin = require("./models/admin");
 const Category = require("./models/category")
 
@@ -175,7 +172,7 @@ app.post("/signup",async function(req,res){
         else return res.render("signup",{page:"signup",message:"Username already exists !!!"});
     }else{
         bcrypt.hash(req.body.pass, saltRounds, function(err, hash) {
-            var u = new User({
+            var u = new Users({
                 ho_ten        : req.body.name,
                 username      : req.body.username,
                 email         : req.body.email,
@@ -183,8 +180,11 @@ app.post("/signup",async function(req,res){
                 dia_chi       : req.body.address,
                 diem_danh_gia : 0,
                 level         : 1,
-                is_update     : 0 ,
-                n_danh_gia    : 0
+                is_update     : 0,
+                n_danh_gia    : 0,
+                sp_Dau_Gia    : [],
+                sp_Yeu_Thich  : [],
+                sp_Ban        : []
             })
             u.save(function(err){
                 if(err){

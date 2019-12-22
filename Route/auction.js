@@ -19,10 +19,11 @@ router.get("/:userID",async function(req,res){
         Cates.find({})
     ])
     var products = await Product.find({
-        _id      : {$in : sp_Dau_Gia },
+        _id      : {$in : user.sp_Dau_Gia },
         date_end : {$gt : n}
     })
-    res.render("home",{page:"product_auction",user,cates,products})
+    var isEmpty = products.length === 0 ? 1 : 0
+    res.render("home",{page:"product_auction",user,cates,products,isEmpty})
 })
 
 // auction/success/:user :Danh sách sản phẩm đấu giá thành công
@@ -38,7 +39,7 @@ router.get("/success/:userID",async function(req,res){
         Cates.find({})
     ])
     var products = await Product.find({
-        _id      : {$in : sp_Dau_Gia },
+        _id      : {$in : user.sp_Dau_Gia },
         date_end : {$lt : n},
     })
     // Xóa các sản phẩm đấu giá không thành công trong danh sách
@@ -49,7 +50,9 @@ router.get("/success/:userID",async function(req,res){
             }
         })
     }    
-    res.render("home",{page:"success",user,cates,products});
+    var isEmpty = products.length === 0 ? 1 : 0
+    
+    res.render("home",{page:"success",user,cates,products,isEmpty});
 })
 
 router.post("/:userID",async function(req,res){
