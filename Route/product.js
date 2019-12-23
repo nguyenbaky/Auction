@@ -99,8 +99,8 @@ router.get("/add/:cateID/:sellerID",async function(req,res){
     res.render("pages/add_product",{page:"add_product",user,categories});
 })
 
-router.post("/add/:sellerID",async function(req,res){    
-    upload(req,res,function (err) {
+router.post("/add/:cateID/:sellerID",async function(req,res){    
+    upload(req,res,async function (err) {
         if(err instanceof multer.MulterError){
             console.log("A multer error occoured when uploading.")
             return res.status(500).send(err)
@@ -130,12 +130,10 @@ router.post("/add/:sellerID",async function(req,res){
                 Num_bid        : 0
             })
             
-            console.log("before save")
             p.save(function(err){
                 if(err) console.log(err)
             })
 
-            console.log("saved")
             // Thêm sp vào cate
             Categories.findOneAndUpdate(
                 {_id:req.body.selectCate},
@@ -144,29 +142,24 @@ router.post("/add/:sellerID",async function(req,res){
                     if(err){
                         console.log(err)
                     }
-                }
-                )
-                console.log("added")
+                })
+
+            console.log(req.files)
             // Lưu URL Images
-            for(i = 0; i < req.files.length;i++){
-                console.log("in for")
-                Products.findOneAndUpdate(
+          
+
+            await Promise.all(req.files.map(async x => {
+                console.log("trc await "+ x.filename)
+                await Products.findOneAndUpdate(
                     {_id:p._id},
-                    {$push : {images:req.files[i].filename}},
-                    function(err){
-                        if(err){
-                            console.log(err)
-                        }else{
-                            console.log("them thanh cong ")
-                        }
-                    }
-                    )
-            }
+                    {$push : {images: x.filename}})   
+                console.log("sau await "+x.filename)
+            }))
+
+           
             return res.redirect("/product/"+req.params.sellerID)
         }        
     })
-
-
 })
 
 // cap nhat gia hien tai

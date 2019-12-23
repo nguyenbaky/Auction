@@ -3,32 +3,22 @@
     <div class="row">
         <div class="col" style="padding-left: 100px;">
             <div class="slideshow-containerd" style="text-align: center;">
-                <div class="mySlides faded">
-                    <div class="numbertext">1 / 3</div>
-                    <img src="images/ip1.jpg" style="width:80%;height:500px">
-                    <div class="text">Caption Text</div>
-                </div>
+                <% p.images.forEach(function(image,index){ %>
+                    <div class="mySlides faded">
+                        <div class="numbertext"><%- index %> / <%- p.images.length %></div>
+                        <img src="upload/<%- image %>" style="width:80%;height:500px">
+                    </div>
+                <% }) %>
                 
-                <div class="mySlides faded" style="text-align: center;">
-                    <div class="numbertext">2 / 3</div>
-                    <img src="images/ip2.jpg" style="width:80%;height:500px">
-                    <div class="text">Caption Two</div>
-                </div>
-                
-                <div class="mySlides faded" style="text-align: center;">
-                    <div class="numbertext">3 / 3</div>
-                    <img src="images/ip3.jpg" style="width:80%;height:500px">
-                    <div class="text">Caption Three</div>
-                </div>
-                
+
                 <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
                 <a class="next" onclick="plusSlides(1)">&#10095;</a>    
             </div>
                 <br>    
             <div style="text-align:center">
-                <span class="dot" onclick="currentSlide(1)"></span> 
-                <span class="dot" onclick="currentSlide(2)"></span> 
-                <span class="dot" onclick="currentSlide(3)"></span> 
+                <% p.images.forEach(function(image,index){ %>
+                    <span class="dot" onclick="currentSlide(<%- index + 1 %>)"></span>
+                <% }) %>
             </div>
         
         </div>
@@ -42,12 +32,14 @@
             <h4>Thời điểm đăng: <%- p.date_begin %> </h4>
             <h4>Thời điểm kết thúc: <%- p.date_end %></h4>
             <h4>Mô tả chi tiết: </h4>
+            <h4><%- p.description %></h4>
             <a class="btn btn-sm btn-outline-primary buy" href="#" role="button" 
                 style="position: absolute;bottom: 10px!important;" data-toggle="modal" data-target="#buyModal">
                 <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                 Đấu giá
             </a>
-            <a class="btn btn-sm btn-outline-danger favorite" href="#" role="button">
+            <a class="btn btn-sm btn-outline-danger favorite" href="#" role="button" 
+                style="position: absolute;bottom: 10px!important;left:130px;">
                 <i class="fa fa-heart" aria-hidden="true"></i>
                 Add to favorite
             </a>
@@ -68,7 +60,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <%  if(!isEmpty){
+                    <%  if(!isEmpty){ %>
                         <% for(i = p.thoi_diem.length - 1;i >= 0; i--){ %> 
                             <tr>
                                 <td><%- p.thoi_diem[i] %></td>
@@ -76,7 +68,7 @@
                                 <td><%- p.Bid_price[i] %></td>
                             </tr>
                         <% } %>
-                    } %>
+                    <% } %>
                 </tbody>
             </table>
         </div>
@@ -93,7 +85,7 @@
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
-                <div id="seller" style="display: none;"><%- p.seller %></div>
+                <div id="seller" style="display: none;"><%- p.Seller %></div>
                 <div id="product_id" style="display: none;"><%- p._id %></div>
                 <% if(typeof user !== "undefined"){ %>
                     <div id="id" style="display: none;"><%- user._id %></div>

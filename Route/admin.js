@@ -185,9 +185,8 @@ router.post("/category/:cate_id",async function(req,res){
                         {_id:id},
                         { $push:{categoryID:c._id} },
                         function(err,cate){
-                            if(!err) console.log("thêm id thanh cong")
-                        })
-                    return res.send("Thêm thành công");  
+                            if(!err) return res.send("Thêm thành công"); 
+                    }) 
                 }
             })
         }

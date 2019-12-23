@@ -66,9 +66,17 @@ $( document ).ready(function() {
     // event click button Đấu giá
     $('.buy').click(function (e) {
         e.preventDefault();
-        if($("#user").text() === ""){
+        var user = $("#user").text()
+        var seller = $('#seller').text()
+        if(user === ""){
             $(this).removeAttr('data-target');
             alert("You have to loggin first to bid !!")       
+            return
+        }
+
+        if(user === seller){
+            $(this).removeAttr('data-target');
+            alert("Không thể đấu giá sản phẩm của mình")
             return
         }
     })
@@ -136,6 +144,7 @@ function bid(gia_hien_tai,buoc_gia) {
         alert("Bước giá thấp hơn qui định")
         return
     }
+
     var d = new Date();
     var y = d.getFullYear()
     var m = d.getMonth() + 1
