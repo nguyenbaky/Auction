@@ -26,9 +26,9 @@
             <h4>Iphone X</h4>
             <h4>Giá hiện tại: <%- p.Gia_Hien_Tai %>đ</h4>
             <h4>Bước giá: <%- p.Buoc_gia %>đ</h4>
-            <h4>Người bán: <%- p.Seller %> &nbsp&nbsp&nbsp Điểm: 0 &nbsp&nbsp&nbsp <i class="fa fa-thumbs-up " id="up" data-toggle="modal" data-target="#myModal"></i>
+            <h4>Người bán: <a href="/user_detail/<%- p.Seller %>"><%- p.Seller %></a>  &nbsp&nbsp&nbsp <i class="fa fa-thumbs-up " id="up" data-toggle="modal" data-target="#myModal"></i>
                 <i class="fa fa-thumbs-down" id="down" data-toggle="modal" data-target="#myModal"></i></h4>
-            <h4>Người đặt cao nhất hiện tại: Y &nbsp&nbsp&nbsp Điểm: 8</h4>
+            <h4>Người đặt cao nhất hiện tại: <a href="/user_detail/<%- p.Bidder[p.Bidder.length - 1] %>"><%- p.Bidder[p.Bidder.length - 1] %></a> </h4>
             <h4>Thời điểm đăng: <%- p.date_begin %> </h4>
             <h4>Thời điểm kết thúc: <%- p.date_end %></h4>
             <h4>Mô tả chi tiết: </h4>

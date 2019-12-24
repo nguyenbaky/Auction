@@ -6,6 +6,7 @@ const Users = require("../models/User")
 const Cates = require("../models/cate")
 const Products = require("../models/product")
 const Categories = require("../models/category")
+const Comments = require("../models/Comment")
 
 router.get("/",async function(req,res){ 
     var d = new Date();
@@ -125,5 +126,15 @@ router.get("/chi-tiet-san-pham/:productID",async function(req,res){
     }  
 })
 
+router.get("/user_detail/:username",async function (req,res) {
+    var [user,cates] = await Promise.all([
+        Users.findOne({username:req.params.username}),
+        Cates.find({})
+    ]) 
+
+    var comments = await Comments.find({name: user.username})
+
+    res.render("home",{page:"user_detail",cates,user,comments}); 
+})
 
 module.exports = router

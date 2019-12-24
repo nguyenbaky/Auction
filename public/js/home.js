@@ -96,14 +96,14 @@ $( document ).ready(function() {
             alert("You have to loggin first to comment seller !!")       
             return
         }
-        point = -1
+        point = 0
     })
     // Gửi nhận xét người bán
-   $('.send').click(function (e) {
+    $('.cmt-btn').click(function (e) {
        var data = {}
        data.sender = $("#user").text()
-       data.name = $("seller").text()
-       data.comment = 4("#comment").text()
+       data.name = $("#seller").text()
+       data.comment = $("#comment").val()
        data.point = point
 
        $.ajax({

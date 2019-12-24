@@ -172,8 +172,8 @@ router.put("/:productID",async function (req,res) {
     }else{
         await Products.findOneAndUpdate(
             {_id:id},
-            {Num_bid: Num_bid+1, Gia_Hien_Tai, 
-            $push:{Bid_price: Gia_Hien_Tai,Bidder: bidder, thoi_diem:thoi_diem}},
+            {Num_bid: product.Num_bid + 1, Gia_Hien_Tai, 
+            $push:{Bid_price: Gia_Hien_Tai,Bidder: bidder, thoi_diem : thoi_diem}},
             function(err){
                 if(err) return res.send(err)
                 else return res.send("Đã đấu giá sản phẩm !!")

@@ -21,6 +21,7 @@ router.get("/profile/:userID",async function(req,res){
     var comments = await Comments.find({name:user.username})
 
     res.render("home",{page:"profile",user,cates,comments});
+    
 })
 // update profile 
 router.put("/profile/:userID",async function(req,res) {
@@ -128,15 +129,51 @@ router.put("/request/:userID",async function(req,res) {
 //comment
 router.post("/comment",async function (req,res) {
     var {name,sender,comment,point} = req.body
-    
-    var cmt = new Comments({
-        name,sender,comment,point
-    })
 
-    cmt.save(function(err){
-        if(err) return res.send(err)
-        else return res.send("comment thành công !!!")
-    })
+    var [user,c] = await Promise.all([
+        Users.findOne({username:name}),
+        Comments.findOne({name,sender})
+    ])
+    if (c === null){
+        Users.findOneAndUpdate(
+            {username      : name },
+            {diem_danh_gia : user.diem_danh_gia + point,
+             n_danh_gia    : user.n_danh_gia + 1 }
+        )
+
+        var cmt = new Comments({
+            name,sender,comment,point
+        })
+    
+        cmt.save(function(err){
+            if(err) return res.send(err)
+            else return res.send("comment thành công !!!")
+        })
+    }else{
+        if(c.point !== point){        
+            if(point === 1) {
+                await Users.findOneAndUpdate(
+                    {username      : name},
+                    {diem_danh_gia : user.diem_danh_gia + 1 }
+                )
+            }else{
+                await Users.findOneAndUpdate(
+                    {username      : name},
+                    {diem_danh_gia : user.diem_danh_gia - 1 },
+                    function (err) {
+                        if(err) console.log(err)
+                })
+                
+            }
+        }
+        await Comments.findOneAndUpdate(
+            {name,sender},
+            {comment,point}
+        )
+        return res.send("comment thành công !!!")
+    }
+
+   
 })
 
 module.exports = router

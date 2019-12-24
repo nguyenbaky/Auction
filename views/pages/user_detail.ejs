@@ -1,0 +1,14 @@
+<div class="tab-pane" id="score" aria-labelledby="score-tab" role="tabpanel" style="padding: 10px;">
+    <h4><%- user.username %></h4>
+    <label><h4>Điểm đánh giá: <%- user.diem_danh_gia %>/<%- user.n_danh_gia %></h4></label>
+    <% comments.forEach(function(comment,index){ %>
+        <div class="card" style="margin:20px">
+            <div class="card-header" >
+              <%- comment.sender %>
+            </div>
+            <div class="card-body">
+              <p class="card-text"><%- comment.comment  %></p>
+            </div>
+        </div>
+    <% }) %>        
+</div>
