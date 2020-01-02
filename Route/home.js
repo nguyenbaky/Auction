@@ -60,24 +60,24 @@ router.get("/category/:cateID/:categoryID/:page",async function(req,res){
         Cates.find({}),
         Categories.findOne({_id:req.params.categoryID})
     ]) 
-
-    var [p,products] = await Promise.all([
-        Products.find({
-            _id      : {$in: category.productID},
-            date_end : {$gt:n}
-        }),
-        Products.find({
+    var p = await  Products.find({
+        _id      : {$in: category.productID},
+        date_end : {$gt:n}
+    })  
+    console.log(p)
+    // total page 
+    var pages = Math.ceil(p.length / resPerPage)
+    if(pages === 0) pages = 1
+    if(page > pages)  res.redirect("/category/"+cateID+"/"+categoryID+"/"+pages)
+    else if(page < 1)  res.redirect("/category/"+cateID+"/"+categoryID+"/1")
+    else{
+        console.log((resPerPage * page) - resPerPage)
+        var products = await Products.find({
             _id      : {$in: category.productID},
             date_end : {$gt:n}
         }).skip((resPerPage * page) - resPerPage)
         .limit(resPerPage)
-    ])
-    // total page 
-    var pages = Math.ceil(p.length / resPerPage)
 
-    if(page > pages)  res.redirect("/category/"+cateID+"/"+categoryID+"/"+pages)
-    else if(page < 1)  res.redirect("/category/"+cateID+"/"+categoryID+"/1")
-    else{
         if(level === 0){
             res.render("home",{
                 page:"category",
@@ -88,7 +88,7 @@ router.get("/category/:cateID/:categoryID/:page",async function(req,res){
                 pages,
                 cateID,
                 categoryID
-             });
+            });
         }
         else{
             var user = await Users.findOne({_id:res.locals.id})
@@ -105,7 +105,7 @@ router.get("/category/:cateID/:categoryID/:page",async function(req,res){
             });
         } 
     }
-     
+    
 })
 
 // /chi-tiet-san-pham/:id_product

@@ -149,11 +149,9 @@ router.post("/add/:cateID/:sellerID",async function(req,res){
           
 
             await Promise.all(req.files.map(async x => {
-                console.log("trc await "+ x.filename)
                 await Products.findOneAndUpdate(
                     {_id:p._id},
                     {$push : {images: x.filename}})   
-                console.log("sau await "+x.filename)
             }))
 
            
@@ -162,23 +160,7 @@ router.post("/add/:cateID/:sellerID",async function(req,res){
     })
 })
 
-// cap nhat gia hien tai
-router.put("/:productID",async function (req,res) {
-    var id = req.params.productID
-    var {Gia_Hien_Tai,bidder,thoi_diem} = req.body
-    var product = await Products.findOne({_id:id})
-    if(product.Gia_Hien_Tai + product.Buoc_gia > Gia_Hien_Tai){
-        return res.send("Giá không hợp lệ !!!")
-    }else{
-        await Products.findOneAndUpdate(
-            {_id:id},
-            {Num_bid: product.Num_bid + 1, Gia_Hien_Tai, 
-            $push:{Bid_price: Gia_Hien_Tai,Bidder: bidder, thoi_diem : thoi_diem}},
-            function(err){
-                if(err) return res.send(err)
-                else return res.send("Đã đấu giá sản phẩm !!")
-            })
-    }    
-})
+
+
 
 module.exports = router

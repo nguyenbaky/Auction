@@ -4,6 +4,7 @@ var router = express.Router()
 const Users = require("../models/User")
 const Cates = require("../models/cate")
 const Comments = require("../models/Comment")
+const Products = require("../models/product")
 
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
@@ -87,7 +88,9 @@ router.get("/favorite/:userID",async function(req,res){
         Cates.find({})
     ])
 
-    res.render("home",{page:"favorite",user,cates});
+    var products = await Products.find({  _id : { $in : user.sp_Yeu_Thich }})
+
+    res.render("home",{page:"favorite",user,cates,products});
 })
 
 router.put("/favorite/:userID",async function(req,res){
@@ -100,14 +103,18 @@ router.put("/favorite/:userID",async function(req,res){
 
     if(user.sp_Yeu_Thich.indexOf(product_id) !== -1) return res.send("Đã thích !!")
     else{
-        await Users.findOneAndUpdate({
-            _id,
-            $push: {sp_Yeu_Thich: product_id},
+        await Users.findOneAndUpdate(
+            {_id},
+            { $push  : {sp_Yeu_Thich: product_id}},
+        )
+        
+        await Users.updateOne(
+            {_id},
+            { $pop : {sp_Yeu_Thich: 1} },
             function(err){
                 if(err) return res.send(err)
                 else return res.send("Đã thêm vào yêu thích !!")
-            }
-        })
+            })
     }
     
 })

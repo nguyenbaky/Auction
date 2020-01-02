@@ -53,6 +53,11 @@ $( document ).ready(function() {
         var data = {}
         data.product_id = $("#product_id").text()
         var id = $("#id").text()
+        if(id === "")
+        {
+            alert("You have to loggin first !!")
+            return
+        }
         $.ajax({
             type: 'PUT',
             data: JSON.stringify(data),
@@ -166,11 +171,11 @@ function bid(gia_hien_tai,buoc_gia) {
         type: 'PUT',
         data: JSON.stringify(data),
         contentType: 'application/json',
-        url: '/product/'+id,						
+        url: '/auction/'+id,						
         success: function(data) {
             alert(data);         
             if(data === "Giá không hợp lệ !!!"){
-                window.reload()
+                location.reload()
             }             
         }
     });
@@ -185,7 +190,7 @@ function bid(gia_hien_tai,buoc_gia) {
         contentType: 'application/json',
         url: '/auction/' + id,						
         success: function(data) {
-            console.log(data)                 
+            location.reload()     
         }
     });
 }
