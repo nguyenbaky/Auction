@@ -6,7 +6,7 @@ const Cates = require("../models/cate")
 const Comments = require("../models/Comment")
 const Products = require("../models/product")
 
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const saltRounds = 10;
 
 //profile

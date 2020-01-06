@@ -41,13 +41,10 @@ var auction = require('./Route/auction')
 var users = require('./Route/user')
 
 const Users = require("./models/User");
-const Products = require("./models/product");
-const Cates = require("./models/cate");
 const admin = require("./models/admin");
-const Category = require("./models/category")
 
 // bcrypt
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const saltRounds = 10;
 
 // jwt 
