@@ -106,16 +106,11 @@ router.put("/favorite/:userID",async function(req,res){
         await Users.findOneAndUpdate(
             {_id},
             { $push  : {sp_Yeu_Thich: product_id}},
-        )
-        
-        await Users.updateOne(
-            {_id},
-            { $pop : {sp_Yeu_Thich: 1} },
             function(err){
                 if(err) return res.send(err)
                 else return res.send("Đã thêm vào yêu thích !!")
             })
-    }
+        }
     
 })
 

@@ -90,17 +90,11 @@ router.put("/:productID",async function (req,res) {
                 Num_bid : product.Num_bid + 1, 
                 Gia_Hien_Tai, 
                 $push :  { Bid_price: Gia_Hien_Tai , Bidder: bidder , thoi_diem : thoi_diem} 
-            })
-            
-        await Products.updateOne(
-            {_id:id},
-            {
-                $pop : {Bid_price : 1, Bidder : 1, thoi_diem : 1}
             },
             function(err){
                 if(err) return res.send(err)
                 else return res.send("Đã đấu giá sản phẩm !!")
-            })
+            })       
     }    
 
 
